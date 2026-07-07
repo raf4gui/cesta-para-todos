@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     await createSession(email)
 
     return NextResponse.json({ ok: true })
-  } catch {
+  } catch (e) {
+    console.error("login error:", e instanceof Error ? e.message : e)
     return NextResponse.json({ error: "Erro interno" }, { status: 500 })
   }
 }
