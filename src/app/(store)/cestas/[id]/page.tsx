@@ -21,6 +21,8 @@ function formatTipo(tipo: string) {
 interface ProductBrand {
   product_id: string
   brand_id: string
+  sale_price?: number
+  purchase_price?: number
   brand: { id: string; name: string }
 }
 
@@ -71,12 +73,14 @@ export default function CestaPage({ params }: { params: Promise<{ id: string }> 
       if (productIds.length > 0) {
         const { data: pbs } = await sb
           .from("product_brands")
-          .select("product_id, brand_id, brand:brands!product_brands_brand_id_fkey(id, name)")
+          .select("product_id, brand_id, sale_price, purchase_price, brand:brands!product_brands_brand_id_fkey(id, name)")
           .in("product_id", productIds)
           .eq("ativo", true)
         const normalized: ProductBrand[] = (pbs ?? []).map((pb: any) => ({
           product_id: pb.product_id,
           brand_id: pb.brand_id,
+          sale_price: pb.sale_price,
+          purchase_price: pb.purchase_price,
           brand: Array.isArray(pb.brand) ? pb.brand[0] : pb.brand,
         }))
         setProductBrands(normalized)
@@ -175,7 +179,11 @@ for (const item of items) {
       const totalPrice = items.reduce((sum, item) => {
         const prod = Array.isArray(item.product) ? item.product[0] : item.product
         const sel = fardoSelections[item.product_id]
-        return sum + Number(prod?.sale_price || 0) * (sel?.quantity || item.quantity)
+        const brandPrice = sel?.chosen_brand_id
+          ? productBrands.find(pb => pb.product_id === item.product_id && pb.brand_id === sel.chosen_brand_id)?.sale_price
+          : null
+        const unitPrice = brandPrice ?? Number(prod?.sale_price || 0)
+        return sum + unitPrice * (sel?.quantity || item.quantity)
       }, 0)
       addItem({
         id: `fardo_${basket.id}_${Date.now()}`,
@@ -301,6 +309,11 @@ for (const item of items) {
               {isFardo && (
                 <p className="text-sm text-[#526157]">Escolha a marca e a quantidade desejada para cada produto.</p>
               )}
+              {!isFardo && (
+                <p className="text-xs leading-relaxed text-[#8c9c91] bg-[#f9fbf9] rounded-lg p-3 border border-[#dfe7dd]">
+                  As marcas dos produtos podem variar de acordo com a disponibilidade em estoque, mantendo sempre a qualidade e as especificações do item.
+                </p>
+              )}
               <div className="divide-y divide-[#f0f4f0] rounded-xl border border-[#dfe7dd]">
                 {items.map((item) => {
                   const prod = Array.isArray(item.product) ? item.product[0] : item.product
@@ -367,7 +380,7 @@ for (const item of items) {
               </div>
             </div>
 
-            {brandMap.size > 0 && !isFardo && (
+            {brandMap.size > 0 && basket.tipo === "CESTA_PERSONALIZADA" && (
               <div className="border-t border-[#dfe7dd] pt-6 space-y-4">
                 <h2 className="text-lg font-black text-[#102016]">Marcas disponíveis</h2>
                 <div className="flex flex-wrap gap-2">

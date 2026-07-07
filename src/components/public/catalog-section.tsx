@@ -107,13 +107,12 @@ export default function CatalogSection() {
             {composition.length > 0 && (
               <div className="space-y-1 pt-2">
                 <span className="text-[10px] font-black text-[#526157] uppercase tracking-wider block">Itens inclusos:</span>
-                <div className="max-h-24 overflow-y-auto text-[11px] font-semibold text-gray-600 space-y-0.5 pr-2">
+                    <div className="max-h-24 overflow-y-auto text-[11px] font-semibold text-gray-600 space-y-0.5 pr-2">
                   {composition.map((c, idx) => {
-                    const brandStr = c.product.brand?.name ? ` ${c.product.brand.name}` : ""
                     const specs = [c.product.peso, c.product.volume, c.product.unidade].filter(Boolean).join(" · ")
                     return (
                       <div key={idx} className="flex justify-between border-b border-[#f2faf3] py-0.5">
-                        <span>{c.product.name}{brandStr}{specs ? ` (${specs})` : ""}</span>
+                        <span>{c.product.name}{specs ? ` (${specs})` : ""}</span>
                         <span className="text-[#006B2E] font-bold">x{c.quantity}</span>
                       </div>
                     )
@@ -197,7 +196,7 @@ export default function CatalogSection() {
             {/* Predefined Cestas */}
             <div id="ready-baskets" className="space-y-6">
               <h3 className="text-xl font-black text-[#102016] flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-[#006B2E]"></span> Cestas Básicas Prontas
+                <span className="h-2 w-2 rounded-full bg-[#006B2E]"></span> Cestas Prontas
               </h3>
               {cestas.length > 0 ? (
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">{cestas.map(renderProductCard)}</div>

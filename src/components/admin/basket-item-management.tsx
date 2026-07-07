@@ -24,10 +24,12 @@ export function BasketItemManagement({
   control,
   setValue,
   watch,
+  tipo,
 }: {
   control: Control<BasketFormValues>;
   setValue: UseFormSetValue<BasketFormValues>;
   watch: UseFormWatch<BasketFormValues>;
+  tipo?: string;
 }) {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -46,6 +48,8 @@ export function BasketItemManagement({
     }
     fetchData();
   }, []);
+
+  const showBrandConfig = tipo === "FARDO"
 
   const handleAddItem = () => {
     append({ product_id: "", quantity: 1, is_customizable: false, allowed_brand_ids: [] });
@@ -86,16 +90,20 @@ export function BasketItemManagement({
                 onChange={(e) => setValue(`items.${index}.quantity`, parseInt(e.target.value, 10) || 1)}
                 className="w-20"
               />
-              <Switch
-                checked={isCustomizable}
-                onCheckedChange={(v) => setValue(`items.${index}.is_customizable`, v)}
-              />
-              <span className="text-sm">Personalizável</span>
+              {showBrandConfig && (
+                <>
+                  <Switch
+                    checked={isCustomizable}
+                    onCheckedChange={(v) => setValue(`items.${index}.is_customizable`, v)}
+                  />
+                  <span className="text-sm">Personalizável</span>
+                </>
+              )}
               <Button variant="destructive" size="icon" onClick={() => remove(index)}>
                 X
               </Button>
             </div>
-            {isCustomizable && (
+            {showBrandConfig && isCustomizable && (
               <div className="mt-2 space-y-1">
                 <label className="block text-sm font-medium text-muted-foreground">Marcas Permitidas</label>
                 {availableBrands.length === 0 ? (

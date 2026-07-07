@@ -151,7 +151,7 @@ export async function getPublicProductsForCustomizer() {
   if (productIds.length > 0) {
     const { data: pbs } = await sb
       .from("product_brands")
-      .select("product_id, brand_id, brand:brands(id, name)")
+      .select("product_id, brand_id, sale_price, purchase_price, brand:brands(id, name)")
       .in("product_id", productIds)
       .eq("ativo", true)
     if (pbs) productBrands = pbs

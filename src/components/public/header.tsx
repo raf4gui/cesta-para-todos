@@ -24,6 +24,7 @@ export default function Header({
   }, [])
 
   return (
+    <>
     <header className={cn(
       "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
       scrolled
@@ -67,9 +68,10 @@ export default function Header({
           </button>
         </div>
       </div>
+    </header>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex bg-black/40 backdrop-blur-sm md:hidden" onClick={() => setIsOpen(false)}>
+        <div className="fixed inset-0 z-[60] flex bg-black/40 backdrop-blur-sm md:hidden" onClick={() => setIsOpen(false)}>
           <div className="ml-auto flex h-full w-[85%] max-w-sm flex-col bg-white p-6 shadow-2xl transition-all duration-300" onClick={(e) => e.stopPropagation()}>
             <div className="mb-8 flex items-center justify-between">
               <div className="relative h-14 w-56">
@@ -117,6 +119,6 @@ export default function Header({
           </div>
         </div>
       )}
-    </header>
+    </>
   )
 }

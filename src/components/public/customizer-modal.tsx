@@ -31,6 +31,8 @@ interface Brand {
 interface ProductBrand {
   product_id: string
   brand_id: string
+  sale_price?: number
+  purchase_price?: number
   brand: { id: string; name: string }
 }
 
@@ -147,13 +149,18 @@ export default function CustomizerModal({ isOpen, onClose, basketId, basketName 
     if (!hasBrands) return true
     return !!details.chosen_brand_id
   })
-  const isValid = totalItems > 0 && hasBrandSelection
+  const MIN_ITEMS = 25
+  const hasMinItems = totalItems >= MIN_ITEMS
+  const isValid = hasMinItems && hasBrandSelection
 
   const handleAddToCart = () => {
     Object.entries(selectedItems).forEach(([prodId, details]) => {
       const prod = products.find(p => p.id === prodId)
       if (!prod) return
-      const unitPrice = details.chosen_brand_id ? prod.sale_price || 0 : 0
+      const brandPrice = details.chosen_brand_id
+        ? productBrands.find(pb => pb.product_id === prodId && pb.brand_id === details.chosen_brand_id)?.sale_price
+        : null
+      const unitPrice = brandPrice ?? prod.sale_price ?? 0
       const brandName = details.chosen_brand_id
         ? (productBrands.find(pb => pb.product_id === prodId && pb.brand_id === details.chosen_brand_id)?.brand?.name
           || prod.brand?.name
@@ -215,10 +222,15 @@ export default function CustomizerModal({ isOpen, onClose, basketId, basketName 
               {/* Items Counter */}
               <div className="flex items-center justify-end gap-2">
                 <span className="text-xs text-muted-foreground">Itens selecionados:</span>
-                <Badge className={`px-2.5 py-0.5 rounded-full text-white font-extrabold ${isValid ? "bg-[#006B2E]" : "bg-gray-400"}`}>
+                <Badge className={`px-2.5 py-0.5 rounded-full text-white font-extrabold ${isValid ? "bg-[#006B2E]" : totalItems >= MIN_ITEMS ? "bg-[#e85f00]" : "bg-gray-400"}`}>
                   {totalItems}
                 </Badge>
               </div>
+              {totalItems > 0 && totalItems < MIN_ITEMS && (
+                <p className="text-xs text-[#e85f00] font-semibold text-right">
+                  Selecione pelo menos {MIN_ITEMS} itens para prosseguir
+                </p>
+              )}
 
               {/* Products List by Category */}
               {Object.keys(categories).length === 0 ? (
@@ -333,6 +345,9 @@ export default function CustomizerModal({ isOpen, onClose, basketId, basketName 
           <div className="px-6 py-4 border-t border-[#dfe7dd] bg-[#fbfcf8] flex items-center justify-between">
             <div className="text-sm text-[#526157]">
               Total selecionado: <span className="font-extrabold text-[#102016]">{totalItems}</span> itens
+              {totalItems > 0 && totalItems < MIN_ITEMS && (
+                <p className="text-xs text-[#e85f00] font-semibold mt-1">Mínimo: {MIN_ITEMS} itens</p>
+              )}
             </div>
             
             <Button
@@ -340,7 +355,7 @@ export default function CustomizerModal({ isOpen, onClose, basketId, basketName 
               onClick={handleAddToCart}
               className={`font-bold transition-all ${isValid && !added ? "bg-[#006B2E] text-white hover:bg-[#005324]" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
             >
-              {added ? <><CheckCircle2 className="h-4 w-4 mr-1" /> Adicionado!</> : <><ShoppingCart className="h-4 w-4 mr-1" /> Adicionar ao Carrinho</>}
+              {added ? <><CheckCircle2 className="h-4 w-4 mr-1" /> Adicionado!</> : !hasMinItems ? <>Mínimo {MIN_ITEMS} itens</> : !hasBrandSelection ? <>Selecione as marcas</> : <><ShoppingCart className="h-4 w-4 mr-1" /> Adicionar ao Carrinho</>}
             </Button>
           </div>
         )}

@@ -22,7 +22,7 @@ const TIPO_LABELS: Record<string, string> = {
   KIT: "Kit", FARDO: "Fardo",
 }
 
-export default function BasketTable({ baskets }: { baskets: BasketRow[] }) {
+export default function BasketTable({ baskets, basePath = "/admin/cestas" }: { baskets: BasketRow[]; basePath?: string }) {
   const router = useRouter();
   const [confirmExclude, setConfirmExclude] = useState<{ id: string; name: string } | null>(null);
   const [excludeError, setExcludeError] = useState("");
@@ -117,7 +117,7 @@ export default function BasketTable({ baskets }: { baskets: BasketRow[] }) {
                 <td className="px-4 py-3 text-[#8c9c91]">{formatDate(basket.created_at)}</td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex gap-1 justify-end">
-                    <Link href={`/admin/cestas/${basket.id}`}>
+                    <Link href={`${basePath}/${basket.id}`}>
                       <Button size="sm" variant="outline" title="Editar"><Pencil className="h-3 w-3" /></Button>
                     </Link>
                     <Button size="sm" variant="outline" onClick={() => handleDuplicate(basket.id)} title="Duplicar"><Copy className="h-3 w-3" /></Button>

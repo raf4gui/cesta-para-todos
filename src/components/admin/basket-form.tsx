@@ -44,11 +44,12 @@ const DEFAULTS: BasketFormValues = {
   quantidade_fardo: undefined as any, items: [],
 }
 
-export default function BasketForm({ initialData }: { initialData?: Partial<BasketFormValues> & { id?: string } }) {
+export default function BasketForm({ initialData, redirectPath = "/admin/cestas" }: { initialData?: Partial<BasketFormValues> & { id?: string }; redirectPath?: string }) {
   const router = useRouter()
   const [brands, setBrands] = useState<Array<{ id: string; name: string }>>([])
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState("")
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { control, errors, isSubmitting, watch, setValue, submit } = useAdminForm({
@@ -56,40 +57,52 @@ export default function BasketForm({ initialData }: { initialData?: Partial<Bask
     defaultValues: DEFAULTS,
     initialData,
     onUpdate: async (id, data) => {
-      // Strip items from basket metadata update (items saved separately)
-      const { items: _, ...meta } = data as any
-      const basketId = initialData?.id
+      try {
+        setFeedback(null)
+        // Strip items from basket metadata update (items saved separately)
+        const { items: _, ...meta } = data as any
+        const basketId = initialData?.id
 
-      // Clean quantity value
-      if (meta.quantidade_fardo !== undefined && meta.quantidade_fardo !== null) {
-        meta.quantidade_fardo = Number(meta.quantidade_fardo) || undefined
-      }
-
-      if (Object.keys(meta).length > 0) {
-        await updateBasket(id, meta)
-      }
-
-      // Save items separately
-      const currentItems = watch("items")
-      if (basketId) {
-        if (selectedTipo !== "CESTA_PERSONALIZADA" && currentItems) {
-          await saveBasketItems(basketId, currentItems)
-        } else {
-          await saveBasketItems(basketId, [])
+        // Clean quantity value
+        if (meta.quantidade_fardo !== undefined && meta.quantidade_fardo !== null) {
+          meta.quantidade_fardo = Number(meta.quantidade_fardo) || undefined
         }
+
+        if (Object.keys(meta).length > 0) {
+          await updateBasket(id, meta)
+        }
+
+        // Save items separately
+        const currentItems = watch("items")
+        if (basketId) {
+          if (selectedTipo !== "CESTA_PERSONALIZADA" && currentItems) {
+            await saveBasketItems(basketId, currentItems)
+          } else {
+            await saveBasketItems(basketId, [])
+          }
+        }
+        setFeedback({ type: "success", message: "Salvo com sucesso!" })
+        setTimeout(() => router.push(redirectPath), 800)
+      } catch (error: any) {
+        setFeedback({ type: "error", message: error.message || "Erro ao salvar." })
       }
-      router.push("/admin/cestas")
     },
     onCreate: async (data) => {
-      const { items, ...basketData } = data as any
-      if (basketData.quantidade_fardo !== undefined && basketData.quantidade_fardo !== null) {
-        basketData.quantidade_fardo = Number(basketData.quantidade_fardo) || undefined
+      try {
+        setFeedback(null)
+        const { items, ...basketData } = data as any
+        if (basketData.quantidade_fardo !== undefined && basketData.quantidade_fardo !== null) {
+          basketData.quantidade_fardo = Number(basketData.quantidade_fardo) || undefined
+        }
+        const newBasket = await createBasket(basketData as any)
+        if (selectedTipo !== "CESTA_PERSONALIZADA" && items) {
+          await saveBasketItems(newBasket.id, items)
+        }
+        setFeedback({ type: "success", message: "Criado com sucesso!" })
+        setTimeout(() => router.push(redirectPath), 800)
+      } catch (error: any) {
+        setFeedback({ type: "error", message: error.message || "Erro ao salvar." })
       }
-      const newBasket = await createBasket(basketData as any)
-      if (selectedTipo !== "CESTA_PERSONALIZADA" && items) {
-        await saveBasketItems(newBasket.id, items)
-      }
-      router.push("/admin/cestas")
     },
   })
 
@@ -209,9 +222,15 @@ export default function BasketForm({ initialData }: { initialData?: Partial<Bask
         <>
           <hr className="border-border my-6" />
           <div className="space-y-4">
-            <BasketItemManagement control={control as any} setValue={setValue} watch={watch} />
+            <BasketItemManagement control={control as any} setValue={setValue} watch={watch} tipo={selectedTipo} />
           </div>
         </>
+      )}
+
+      {feedback && (
+        <div className={`rounded-xl border p-4 text-sm font-medium ${feedback.type === "success" ? "border-green-200 bg-green-50 text-green-700" : "border-red-200 bg-red-50 text-red-700"}`}>
+          {feedback.message}
+        </div>
       )}
 
       <div className="flex justify-end gap-3 pt-4 border-t">

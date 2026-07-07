@@ -22,7 +22,10 @@ export async function listBaskets({ page = 1, limit = 25, search = "", sort = "c
   const from = (page - 1) * limit, to = from + limit - 1
   let q = sb().from("baskets").select("*", { count: "exact" })
   if (search) q = q.ilike("name", `%${search}%`)
-  if (tipo) q = q.eq("tipo", tipo)
+  if (tipo) {
+    const tipos = tipo.split(",").filter(Boolean)
+    if (tipos.length > 0) q = q.in("tipo", tipos)
+  }
   if (active === "true") q = q.eq("ativo", true)
   else if (active === "false") q = q.eq("ativo", false)
   const sortMap: Record<string, any> = { created_at_desc: { column: "created_at", ascending: false }, created_at_asc: { column: "created_at", ascending: true }, name_asc: { column: "name", ascending: true }, name_desc: { column: "name", ascending: false }, price_asc: { column: "price", ascending: true }, price_desc: { column: "price", ascending: false } }

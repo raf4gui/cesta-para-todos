@@ -28,17 +28,22 @@ const RealtimeContext = createContext<RealtimeContextType | null>(null)
 function playNotificationSound() {
   try {
     const ctx = new AudioContext()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.type = "sine"
-    osc.frequency.setValueAtTime(880, ctx.currentTime)
-    osc.frequency.setValueAtTime(1100, ctx.currentTime + 0.08)
-    gain.gain.setValueAtTime(0.2, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.start()
-    osc.stop(ctx.currentTime + 0.3)
+    const play = (t: number) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = "sine"
+      osc.frequency.setValueAtTime(880, ctx.currentTime + t)
+      osc.frequency.setValueAtTime(1100, ctx.currentTime + t + 0.08)
+      gain.gain.setValueAtTime(0.18, ctx.currentTime + t)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.25)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(ctx.currentTime + t)
+      osc.stop(ctx.currentTime + t + 0.25)
+    }
+    play(0)
+    play(0.25)
+    play(0.5)
   } catch {}
 }
 

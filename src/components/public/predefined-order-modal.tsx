@@ -94,14 +94,16 @@ export default function PredefinedOrderModal({ isOpen, onClose, basket, composit
 
           <div className="space-y-3">
             <h3 className="text-sm font-black text-[#102016] uppercase tracking-wider">Itens inclusos ({compositionItems.length})</h3>
+            <p className="text-[10px] leading-relaxed text-[#8c9c91] bg-[#f9fbf9] rounded-lg p-2.5 border border-[#dfe7dd]">
+              As marcas dos produtos podem variar de acordo com a disponibilidade em estoque, mantendo sempre a qualidade e as especificações do item.
+            </p>
             <div className="space-y-2">
               {compositionItems.map((item, idx) => {
-                const brandStr = item.product.brand?.name ? ` - ${item.product.brand.name}` : ""
                 const specs = [item.product.peso, item.product.volume, item.product.unidade].filter(Boolean).join(" · ")
                 return (
                   <div key={idx} className="flex items-center justify-between p-3 rounded-lg border border-[#dfe7dd] bg-white">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-[#102016]">{item.product.name}{brandStr}</p>
+                      <p className="text-sm font-semibold text-[#102016]">{item.product.name}</p>
                       {specs && <p className="text-xs text-[#8c9c91]">{specs}</p>}
                     </div>
                     <span className="text-sm font-bold text-[#006B2E] ml-3">x{item.quantity}</span>

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import { FolderTree, LayoutDashboard, ShoppingBasket, Tags, Package, LogOut, Users, Settings, ClipboardList, BarChart3, Boxes, DollarSign, FileText, ChevronLeft, StickyNote, ShoppingBag } from "lucide-react"
+import { FolderTree, LayoutDashboard, ShoppingBasket, Tags, Package, LogOut, Users, Settings, ClipboardList, BarChart3, Boxes, DollarSign, FileText, ChevronLeft, StickyNote, ShoppingBag, Gift, Wine } from "lucide-react"
 import { signOut } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
 import { useUnreadOrders } from "@/lib/realtime-context"
@@ -15,9 +15,11 @@ const NAV_ITEMS = [
   { href: "/admin/clientes", label: "Clientes", icon: Users },
   { href: "/admin/produtos", label: "Produtos", icon: Package },
   { href: "/admin/produtos/personalizacao", label: "Cesta Personalizada", icon: ShoppingBag },
+  { href: "/admin/cestas-prontas", label: "Cestas Prontas", icon: ShoppingBasket },
+  { href: "/admin/kits", label: "Kits", icon: Gift },
+  { href: "/admin/fardos", label: "Fardos", icon: Wine },
   { href: "/admin/categorias", label: "Categorias", icon: FolderTree },
   { href: "/admin/marcas", label: "Marcas", icon: Tags },
-  { href: "/admin/cestas", label: "Cestas", icon: ShoppingBasket },
   { href: "/admin/estoque", label: "Estoque", icon: Boxes },
   { href: "/admin/financeiro", label: "Financeiro", icon: DollarSign },
   { href: "/admin/anotacoes", label: "Anotações", icon: StickyNote },

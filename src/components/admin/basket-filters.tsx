@@ -10,9 +10,10 @@ interface BasketFiltersProps {
   initialSort: string;
   initialActive: string;
   initialTipo: string;
+  baseUrl?: string;
 }
 
-export default function BasketFilters({ initialSearch, initialSort, initialActive, initialTipo }: BasketFiltersProps) {
+export default function BasketFilters({ initialSearch, initialSort, initialActive, initialTipo, baseUrl = "/admin/cestas" }: BasketFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -28,7 +29,7 @@ export default function BasketFilters({ initialSearch, initialSort, initialActiv
       }
       params.set("page", "1");
       startTransition(() => {
-        router.push(`/admin/cestas?${params.toString()}`);
+        router.push(`${baseUrl}?${params.toString()}`);
       });
     },
     [router, searchParams, startTransition],
