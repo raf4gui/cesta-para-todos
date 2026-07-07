@@ -16,6 +16,7 @@ type BasketItemRow = { basket_id: string; product_id: string; quantity: number; 
 export async function getPublicCatalogItems() {
   const sb = supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
+  // Try full query with FK embeds first (fast path)
   const { data: baskets, error: basketsErr } = await sb
     .from("baskets")
     .select("id, name, description, image_url, tipo, brand_id, brand:brands!baskets_brand_id_fkey(name), quantidade_fardo")
@@ -23,13 +24,26 @@ export async function getPublicCatalogItems() {
     .eq("show_catalog", true)
     .order("name")
 
+  let basketList: any[] = baskets ?? []
+  let basketItems: BasketItemRow[] = []
+  let catProducts: any[] = []
+
   if (basketsErr) {
-    console.error("Catalog baskets query error:", basketsErr.message, basketsErr.details, basketsErr.hint)
-    throw new Error(`Baskets query: ${basketsErr.message}`)
+    console.error("Catalog baskets query error (fallback):", basketsErr.message)
+    // Fallback: query without FK embeds
+    const { data: simple } = await sb
+      .from("baskets")
+      .select("id, name, description, image_url, tipo, brand_id, quantidade_fardo")
+      .eq("ativo", true)
+      .order("name")
+    basketList = simple ?? []
+    // Fetch brand names separately
+    const { data: brands } = await sb.from("brands").select("id, name").eq("ativo", true)
+    const brandMap = Object.fromEntries((brands ?? []).map((b: any) => [b.id, b]))
+    basketList = basketList.map((b: any) => ({ ...b, brand: brandMap[b.brand_id] || null }))
   }
 
-  const basketIds = (baskets ?? []).map((b) => b.id)
-  let basketItems: BasketItemRow[] = []
+  const basketIds = basketList.map((b: any) => b.id)
 
   if (basketIds.length > 0) {
     const { data: items, error: itemsErr } = await sb
@@ -37,21 +51,65 @@ export async function getPublicCatalogItems() {
       .select("basket_id, product_id, quantity, product:products(name, peso, volume, unidade, brand:brands!products_brand_id_fkey(name))")
       .in("basket_id", basketIds)
 
-    if (!itemsErr && items) basketItems = items as any
+    if (itemsErr) {
+      // Fallback: query items without product embed
+      const { data: simpleItems } = await sb
+        .from("basket_items")
+        .select("basket_id, product_id, quantity")
+        .in("basket_id", basketIds)
+      if (simpleItems) {
+        const pIds = [...new Set(simpleItems.map((i: any) => i.product_id))]
+        const { data: prods } = await sb
+          .from("products")
+          .select("id, name, peso, volume, unidade, brand_id")
+          .in("id", pIds)
+        const prodMap = Object.fromEntries((prods ?? []).map((p: any) => [p.id, p]))
+        const { data: brands } = await sb.from("brands").select("id, name")
+        const brandMap = Object.fromEntries((brands ?? []).map((b: any) => [b.id, b]))
+        basketItems = simpleItems.map((i: any) => ({
+          ...i,
+          product: prodMap[i.product_id]
+            ? { ...prodMap[i.product_id], brand: brandMap[prodMap[i.product_id].brand_id] || null }
+            : null,
+        })) as any
+      }
+    } else if (items) {
+      basketItems = items as any
+    }
   }
 
-  const { data: catProducts, error: catErr } = await sb
+  const { data: products, error: catErr } = await sb
     .from("products")
     .select("id, name, description, image_url, stock, sale_price, peso, volume, unidade, brand_id, brand:brands!products_brand_id_fkey(id, name), category:categories(name)")
     .eq("ativo", true)
     .order("name")
 
   if (catErr) {
-    console.error("Catalog products query error:", catErr.message, catErr.details, catErr.hint)
-    throw new Error(`Products query: ${catErr.message}`)
+    console.error("Catalog products query error (fallback):", catErr.message)
+    // Fallback: query products without FK embeds
+    const { data: simple } = await sb
+      .from("products")
+      .select("id, name, description, image_url, stock, sale_price, peso, volume, unidade, brand_id, category_id")
+      .eq("ativo", true)
+      .order("name")
+    catProducts = simple ?? []
+    // Fetch brand and category names separately
+    const [{ data: brands }, { data: categories }] = await Promise.all([
+      sb.from("brands").select("id, name"),
+      sb.from("categories").select("id, name"),
+    ])
+    const brandMap = Object.fromEntries((brands ?? []).map((b: any) => [b.id, b]))
+    const catMap = Object.fromEntries((categories ?? []).map((c: any) => [c.id, c]))
+    catProducts = catProducts.map((p: any) => ({
+      ...p,
+      brand: brandMap[p.brand_id] || null,
+      category: catMap[p.category_id] || null,
+    }))
+  } else {
+    catProducts = products ?? []
   }
 
-  return { items: baskets ?? [], basketItems, products: catProducts ?? [] }
+  return { items: basketList, basketItems, products: catProducts }
 }
 
 export async function getPublicProductsForCustomizer() {
