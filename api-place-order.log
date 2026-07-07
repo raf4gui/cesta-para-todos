@@ -1,0 +1,112 @@
+[2026-06-30T23:27:53.521Z] === INICIO ===
+[2026-06-30T23:27:53.522Z] URL: http://localhost:3000/api/place-order
+[2026-06-30T23:27:53.523Z] Method: POST
+[2026-06-30T23:27:53.523Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"1252","content-type":"application/json","cookie":"admin_auth=1; __next_hmr_refresh_hash__=1844","host":"localhost:3000","origin":"http://localhost:3000","referer":"http://localhost:3000/","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"Windows\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","x-forwarded-for":"::1","x-forwarded-host":"localhost:3000","x-forwarded-port":"3000","x-forwarded-proto":"http"}
+[2026-06-30T23:27:53.525Z] Raw body: {"client_name":"Maria","client_phone":"74999581805","basket_id":"e0671d18-4b7d-41ff-a5db-b93a89e99c9d","items":[{"product_id":"a89bee31-45bd-4834-b335-a24cf4f4ef8d","quantity":2},{"product_id":"b2c9a011-1657-4853-a741-d70aecc04fb6","quantity":4},{"product_id":"8572420d-6028-47c9-ac01-09cdc220cf51","quantity":3},{"product_id":"7008e44c-1609-4905-a6f8-79bcce72e627","quantity":2},{"product_id":"16f00269-aec1-4bb4-83fc-a0df14e95de4","quantity":1},{"product_id":"3a097bed-88d2-4eb9-a3e9-bd9867df918b","quantity":1},{"product_id":"ad5e4dbf-8207-4fb2-9ce7-2e516e5ec0ea","quantity":1},{"product_id":"81bffe3b-a6d4-4de9-8ec2-e74324adc45e","quantity":1},{"product_id":"e6c391a4-7a64-4472-ae64-08aba451c7d9","quantity":4},{"product_id":"9a320a50-5c0a-4f82-9669-c8c0e4767394","quantity":2},{"product_id":"d4e93902-f1ea-4d3c-b8e6-cceae2085af4","quantity":2},{"product_id":"db15a461-53f5-4351-874d-7bfbe2dfd464","quantity":1},{"product_id":"0d967e29-f221-4a3c-be6f-5f31ed0bb56f","quantity":1},{"product_id":"14f1cab5-a717-4e11-8598-e3371d849331","quantity":1},{"product_id":"a16118cd-22e0-4cb0-ab18-ad936a9da99e","quantity":2},{"product_id":"6fbd3e13-d269-4671-80e3-456620e87dc5","quantity":1},{"product_id":"03b4ae04-2e70-4a41-bc8a-86efa14f2c72","quantity":1}]}
+[2026-06-30T23:27:53.526Z] Parsed client_name: "Maria"
+[2026-06-30T23:27:53.526Z] Parsed client_phone: "74999581805"
+[2026-06-30T23:27:53.527Z] Cleaned phone: 74999581805
+[2026-06-30T23:27:53.754Z] Existing customer for 74999581805: add51b89 José
+[2026-06-30T23:27:53.754Z] Reusing customer: add51b89
+[2026-06-30T23:27:53.876Z] Order created: c1a7baeb protocol=CP-000044
+[2026-06-30T23:27:54.200Z] Order items inserted: 17
+[2026-06-30T23:27:54.441Z] Response: customer=add51b89 protocol=CP-000044
+[2026-06-30T23:27:54.442Z] === FIM ===
+[2026-06-30T23:32:02.629Z] === INICIO ===
+[2026-06-30T23:32:02.630Z] URL: http://localhost:3000/api/place-order
+[2026-06-30T23:32:02.630Z] Method: POST
+[2026-06-30T23:32:02.631Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"1252","content-type":"application/json","cookie":"admin_auth=1; __next_hmr_refresh_hash__=1991","host":"localhost:3000","origin":"http://localhost:3000","referer":"http://localhost:3000/","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"Windows\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","x-forwarded-for":"::1","x-forwarded-host":"localhost:3000","x-forwarded-port":"3000","x-forwarded-proto":"http"}
+[2026-06-30T23:32:02.632Z] Raw body: {"client_name":"Carla","client_phone":"74999581805","basket_id":"e0671d18-4b7d-41ff-a5db-b93a89e99c9d","items":[{"product_id":"a89bee31-45bd-4834-b335-a24cf4f4ef8d","quantity":2},{"product_id":"b2c9a011-1657-4853-a741-d70aecc04fb6","quantity":4},{"product_id":"8572420d-6028-47c9-ac01-09cdc220cf51","quantity":3},{"product_id":"7008e44c-1609-4905-a6f8-79bcce72e627","quantity":2},{"product_id":"16f00269-aec1-4bb4-83fc-a0df14e95de4","quantity":1},{"product_id":"3a097bed-88d2-4eb9-a3e9-bd9867df918b","quantity":1},{"product_id":"ad5e4dbf-8207-4fb2-9ce7-2e516e5ec0ea","quantity":1},{"product_id":"81bffe3b-a6d4-4de9-8ec2-e74324adc45e","quantity":1},{"product_id":"e6c391a4-7a64-4472-ae64-08aba451c7d9","quantity":4},{"product_id":"9a320a50-5c0a-4f82-9669-c8c0e4767394","quantity":2},{"product_id":"d4e93902-f1ea-4d3c-b8e6-cceae2085af4","quantity":2},{"product_id":"db15a461-53f5-4351-874d-7bfbe2dfd464","quantity":1},{"product_id":"0d967e29-f221-4a3c-be6f-5f31ed0bb56f","quantity":1},{"product_id":"14f1cab5-a717-4e11-8598-e3371d849331","quantity":1},{"product_id":"a16118cd-22e0-4cb0-ab18-ad936a9da99e","quantity":2},{"product_id":"6fbd3e13-d269-4671-80e3-456620e87dc5","quantity":1},{"product_id":"03b4ae04-2e70-4a41-bc8a-86efa14f2c72","quantity":1}]}
+[2026-06-30T23:32:02.633Z] Parsed client_name: "Carla"
+[2026-06-30T23:32:02.633Z] Parsed client_phone: "74999581805"
+[2026-06-30T23:32:02.634Z] Cleaned phone: 74999581805
+[2026-06-30T23:32:02.863Z] Existing customer for 74999581805: add51b89 José
+[2026-06-30T23:32:02.864Z] Reusing customer: add51b89
+[2026-06-30T23:32:03.033Z] Order created: 8c2121b7 protocol=CP-000045
+[2026-06-30T23:32:03.259Z] Order items inserted: 17
+[2026-06-30T23:32:03.439Z] Response: customer=add51b89 protocol=CP-000045
+[2026-06-30T23:32:03.439Z] === FIM ===
+[2026-07-01T23:03:18.077Z] === INICIO ===
+[2026-07-01T23:03:18.079Z] URL: http://localhost:3000/api/place-order
+[2026-07-01T23:03:18.079Z] Method: POST
+[2026-07-01T23:03:18.079Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"1252","content-type":"application/json","cookie":"admin_auth=1; __next_hmr_refresh_hash__=1991","host":"localhost:3000","origin":"http://localhost:3000","referer":"http://localhost:3000/","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"Windows\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","x-forwarded-for":"::1","x-forwarded-host":"localhost:3000","x-forwarded-port":"3000","x-forwarded-proto":"http"}
+[2026-07-01T23:03:18.083Z] Raw body: {"client_name":"Maria","client_phone":"74999581805","basket_id":"e0671d18-4b7d-41ff-a5db-b93a89e99c9d","items":[{"product_id":"a89bee31-45bd-4834-b335-a24cf4f4ef8d","quantity":2},{"product_id":"b2c9a011-1657-4853-a741-d70aecc04fb6","quantity":4},{"product_id":"8572420d-6028-47c9-ac01-09cdc220cf51","quantity":3},{"product_id":"7008e44c-1609-4905-a6f8-79bcce72e627","quantity":2},{"product_id":"16f00269-aec1-4bb4-83fc-a0df14e95de4","quantity":1},{"product_id":"3a097bed-88d2-4eb9-a3e9-bd9867df918b","quantity":1},{"product_id":"ad5e4dbf-8207-4fb2-9ce7-2e516e5ec0ea","quantity":1},{"product_id":"81bffe3b-a6d4-4de9-8ec2-e74324adc45e","quantity":1},{"product_id":"e6c391a4-7a64-4472-ae64-08aba451c7d9","quantity":4},{"product_id":"9a320a50-5c0a-4f82-9669-c8c0e4767394","quantity":2},{"product_id":"d4e93902-f1ea-4d3c-b8e6-cceae2085af4","quantity":2},{"product_id":"db15a461-53f5-4351-874d-7bfbe2dfd464","quantity":1},{"product_id":"0d967e29-f221-4a3c-be6f-5f31ed0bb56f","quantity":1},{"product_id":"14f1cab5-a717-4e11-8598-e3371d849331","quantity":1},{"product_id":"a16118cd-22e0-4cb0-ab18-ad936a9da99e","quantity":2},{"product_id":"6fbd3e13-d269-4671-80e3-456620e87dc5","quantity":1},{"product_id":"03b4ae04-2e70-4a41-bc8a-86efa14f2c72","quantity":1}]}
+[2026-07-01T23:03:18.083Z] Parsed client_name: "Maria"
+[2026-07-01T23:03:18.084Z] Parsed client_phone: "74999581805"
+[2026-07-01T23:03:18.086Z] Cleaned phone: 74999581805
+[2026-07-01T23:03:18.304Z] Existing customer for 74999581805: add51b89 José
+[2026-07-01T23:03:18.304Z] Reusing customer: add51b89
+[2026-07-01T23:03:18.468Z] Order created: 0759fd69 protocol=CP-000046
+[2026-07-01T23:03:18.696Z] Order items inserted: 17
+[2026-07-01T23:03:18.899Z] Response: customer=add51b89 protocol=CP-000046
+[2026-07-01T23:03:18.899Z] === FIM ===
+[2026-07-01T23:49:19.685Z] === INICIO ===
+[2026-07-01T23:49:19.686Z] URL: http://localhost:3000/api/place-order
+[2026-07-01T23:49:19.687Z] Method: POST
+[2026-07-01T23:49:19.687Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"1252","content-type":"application/json","cookie":"admin_auth=1; __next_hmr_refresh_hash__=1991","host":"localhost:3000","origin":"http://localhost:3000","referer":"http://localhost:3000/","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"Windows\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","x-forwarded-for":"::1","x-forwarded-host":"localhost:3000","x-forwarded-port":"3000","x-forwarded-proto":"http"}
+[2026-07-01T23:49:19.690Z] Raw body: {"client_name":"Maria","client_phone":"74999581805","basket_id":"e0671d18-4b7d-41ff-a5db-b93a89e99c9d","items":[{"product_id":"a89bee31-45bd-4834-b335-a24cf4f4ef8d","quantity":2},{"product_id":"b2c9a011-1657-4853-a741-d70aecc04fb6","quantity":4},{"product_id":"8572420d-6028-47c9-ac01-09cdc220cf51","quantity":3},{"product_id":"7008e44c-1609-4905-a6f8-79bcce72e627","quantity":2},{"product_id":"16f00269-aec1-4bb4-83fc-a0df14e95de4","quantity":1},{"product_id":"3a097bed-88d2-4eb9-a3e9-bd9867df918b","quantity":1},{"product_id":"ad5e4dbf-8207-4fb2-9ce7-2e516e5ec0ea","quantity":1},{"product_id":"81bffe3b-a6d4-4de9-8ec2-e74324adc45e","quantity":1},{"product_id":"e6c391a4-7a64-4472-ae64-08aba451c7d9","quantity":4},{"product_id":"9a320a50-5c0a-4f82-9669-c8c0e4767394","quantity":2},{"product_id":"d4e93902-f1ea-4d3c-b8e6-cceae2085af4","quantity":2},{"product_id":"db15a461-53f5-4351-874d-7bfbe2dfd464","quantity":1},{"product_id":"0d967e29-f221-4a3c-be6f-5f31ed0bb56f","quantity":1},{"product_id":"14f1cab5-a717-4e11-8598-e3371d849331","quantity":1},{"product_id":"a16118cd-22e0-4cb0-ab18-ad936a9da99e","quantity":2},{"product_id":"6fbd3e13-d269-4671-80e3-456620e87dc5","quantity":1},{"product_id":"03b4ae04-2e70-4a41-bc8a-86efa14f2c72","quantity":1}]}
+[2026-07-01T23:49:19.691Z] Parsed client_name: "Maria"
+[2026-07-01T23:49:19.691Z] Parsed client_phone: "74999581805"
+[2026-07-01T23:49:19.705Z] Cleaned phone: 74999581805
+[2026-07-01T23:49:20.105Z] Existing customer for 74999581805: add51b89 José
+[2026-07-01T23:49:20.106Z] Reusing customer: add51b89
+[2026-07-01T23:49:20.851Z] Order created: 7101076a protocol=CP-000047
+[2026-07-01T23:49:21.093Z] Order items inserted: 17
+[2026-07-01T23:49:21.509Z] Response: customer=add51b89 protocol=CP-000047
+[2026-07-01T23:49:21.509Z] === FIM ===
+[2026-07-01T23:50:00.901Z] === INICIO ===
+[2026-07-01T23:50:00.902Z] URL: http://localhost:3000/api/place-order
+[2026-07-01T23:50:00.903Z] Method: POST
+[2026-07-01T23:50:00.904Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"113","content-type":"application/json","cookie":"admin_auth=1; __next_hmr_refresh_hash__=1991","host":"localhost:3000","origin":"http://localhost:3000","referer":"http://localhost:3000/","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"Windows\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","x-forwarded-for":"::1","x-forwarded-host":"localhost:3000","x-forwarded-port":"3000","x-forwarded-proto":"http"}
+[2026-07-01T23:50:00.906Z] Raw body: {"client_name":"Maria","client_phone":"7499958122","basket_id":"36aca8e8-30df-4dc8-a1c4-bf377adb98df","items":[]}
+[2026-07-01T23:50:00.906Z] Parsed client_name: "Maria"
+[2026-07-01T23:50:00.906Z] Parsed client_phone: "7499958122"
+[2026-07-01T23:50:00.909Z] Cleaned phone: 7499958122
+[2026-07-01T23:50:01.274Z] Existing customer for 7499958122: NONE
+[2026-07-01T23:50:01.275Z] Inserting new customer: name=Maria, phone=7499958122
+[2026-07-01T23:50:01.539Z] New customer created: a847d166
+[2026-07-01T23:50:01.653Z] Order created: ed7c4ac9 protocol=CP-000048
+[2026-07-01T23:50:01.761Z] Response: customer=a847d166 protocol=CP-000048
+[2026-07-01T23:50:01.761Z] === FIM ===
+[2026-07-02T20:57:02.833Z] === INICIO ===
+[2026-07-02T20:57:02.847Z] URL: http://localhost:3000/api/place-order
+[2026-07-02T20:57:02.854Z] Method: POST
+[2026-07-02T20:57:02.858Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"1251","content-security-policy":"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://*.supabase.co; frame-src 'none'; object-src 'none'","content-type":"application/json","cookie":"admin_auth=1; __next_hmr_refresh_hash__=129; admin_session=Y2VzdGEgcGFyYSB0b2RvczoxNzgzMDIzMDk2MzIyOmNlc3RhIHBhcmEgdG9kb3M6Q2FsaW5l","host":"localhost:3000","origin":"http://localhost:3000","permissions-policy":"camera=(), microphone=(), geolocation=()","referer":"http://localhost:3000/","referrer-policy":"strict-origin-when-cross-origin","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?1","sec-ch-ua-platform":"\"Android\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36","x-content-type-options":"nosniff","x-forwarded-for":"::1","x-forwarded-host":"localhost:3000","x-forwarded-port":"3000","x-forwarded-proto":"http","x-frame-options":"DENY"}
+[2026-07-02T20:57:02.887Z] Raw body: {"client_name":"Maria","client_phone":"7499958122","basket_id":"e0671d18-4b7d-41ff-a5db-b93a89e99c9d","items":[{"product_id":"a89bee31-45bd-4834-b335-a24cf4f4ef8d","quantity":2},{"product_id":"b2c9a011-1657-4853-a741-d70aecc04fb6","quantity":4},{"product_id":"8572420d-6028-47c9-ac01-09cdc220cf51","quantity":3},{"product_id":"7008e44c-1609-4905-a6f8-79bcce72e627","quantity":2},{"product_id":"16f00269-aec1-4bb4-83fc-a0df14e95de4","quantity":1},{"product_id":"3a097bed-88d2-4eb9-a3e9-bd9867df918b","quantity":1},{"product_id":"ad5e4dbf-8207-4fb2-9ce7-2e516e5ec0ea","quantity":1},{"product_id":"81bffe3b-a6d4-4de9-8ec2-e74324adc45e","quantity":1},{"product_id":"e6c391a4-7a64-4472-ae64-08aba451c7d9","quantity":4},{"product_id":"9a320a50-5c0a-4f82-9669-c8c0e4767394","quantity":2},{"product_id":"d4e93902-f1ea-4d3c-b8e6-cceae2085af4","quantity":2},{"product_id":"db15a461-53f5-4351-874d-7bfbe2dfd464","quantity":1},{"product_id":"0d967e29-f221-4a3c-be6f-5f31ed0bb56f","quantity":1},{"product_id":"14f1cab5-a717-4e11-8598-e3371d849331","quantity":1},{"product_id":"a16118cd-22e0-4cb0-ab18-ad936a9da99e","quantity":2},{"product_id":"6fbd3e13-d269-4671-80e3-456620e87dc5","quantity":1},{"product_id":"03b4ae04-2e70-4a41-bc8a-86efa14f2c72","quantity":1}]}
+[2026-07-02T20:57:02.893Z] Parsed client_name: "Maria"
+[2026-07-02T20:57:02.894Z] Parsed client_phone: "7499958122"
+[2026-07-02T20:57:02.913Z] Cleaned phone: 7499958122
+[2026-07-02T20:57:03.276Z] Existing customer for 7499958122: NONE
+[2026-07-02T20:57:03.278Z] Inserting new customer: name=Maria, phone=7499958122
+[2026-07-02T20:57:03.608Z] New customer created: 9fe74acd
+[2026-07-02T20:57:03.830Z] Order created: 1e8eada9 protocol=CP-000003
+[2026-07-02T20:57:04.117Z] Order items inserted: 17
+[2026-07-02T20:57:04.228Z] Response: customer=9fe74acd protocol=CP-000003
+[2026-07-02T20:57:04.230Z] === FIM ===
+[2026-07-06T18:31:38.914Z] === INICIO ===
+[2026-07-06T18:31:38.916Z] URL: http://localhost:3001/api/place-order
+[2026-07-06T18:31:38.916Z] Method: POST
+[2026-07-06T18:31:38.917Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"111","content-security-policy":"default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co; font-src 'self'; connect-src 'self' https://*.supabase.co; frame-src 'none'; object-src 'none'","content-type":"application/json","cookie":"admin_session=Y2VzdGEgcGFyYSB0b2RvczoxNzgzMDIzMDk2MzIyOmNlc3RhIHBhcmEgdG9kb3M6Q2FsaW5l; __next_hmr_refresh_hash__=201","host":"localhost:3001","origin":"http://localhost:3001","permissions-policy":"camera=(), microphone=(), geolocation=()","referer":"http://localhost:3001/","referrer-policy":"strict-origin-when-cross-origin","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"Windows\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","x-content-type-options":"nosniff","x-forwarded-for":"::1","x-forwarded-host":"localhost:3001","x-forwarded-port":"3001","x-forwarded-proto":"http","x-frame-options":"DENY"}
+[2026-07-06T18:31:38.920Z] Raw body: {"client_name":"Maria","client_phone":"74000000","basket_id":"dc977e41-be87-4559-a594-71eabf1ebaf0","items":[]}
+[2026-07-06T18:31:38.921Z] Parsed client_name: "Maria"
+[2026-07-06T18:31:38.922Z] Parsed client_phone: "74000000"
+[2026-07-06T18:31:38.923Z] Cleaned phone: 74000000
+[2026-07-06T18:31:39.451Z] Existing customer for 74000000: NONE
+[2026-07-06T18:31:39.451Z] Inserting new customer: name=Maria, phone=74000000
+[2026-07-06T18:31:39.710Z] New customer created: 93ba3966
+[2026-07-06T18:31:39.895Z] Order created: 1d9b5cc9 protocol=CP-000004
+[2026-07-06T18:31:39.995Z] Response: customer=93ba3966 protocol=CP-000004
+[2026-07-06T18:31:39.996Z] === FIM ===
+[2026-07-06T18:43:25.186Z] === INICIO ===
+[2026-07-06T18:43:25.187Z] URL: http://localhost:3001/api/place-order
+[2026-07-06T18:43:25.187Z] Method: POST
+[2026-07-06T18:43:25.188Z] Headers: {"accept":"*/*","accept-encoding":"gzip, deflate, br, zstd","accept-language":"pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7","connection":"keep-alive","content-length":"111","content-security-policy":"default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co; font-src 'self'; connect-src 'self' https://*.supabase.co; frame-src 'none'; object-src 'none'","content-type":"application/json","cookie":"admin_session=Y2VzdGEgcGFyYSB0b2RvczoxNzgzMDIzMDk2MzIyOmNlc3RhIHBhcmEgdG9kb3M6Q2FsaW5l; __next_hmr_refresh_hash__=481","host":"localhost:3001","origin":"http://localhost:3001","permissions-policy":"camera=(), microphone=(), geolocation=()","referer":"http://localhost:3001/","referrer-policy":"strict-origin-when-cross-origin","sec-ch-ua":"\"Google Chrome\";v=\"149\", \"Chromium\";v=\"149\", \"Not)A;Brand\";v=\"24\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"Windows\"","sec-fetch-dest":"empty","sec-fetch-mode":"cors","sec-fetch-site":"same-origin","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36","x-content-type-options":"nosniff","x-forwarded-for":"::1","x-forwarded-host":"localhost:3001","x-forwarded-port":"3001","x-forwarded-proto":"http","x-frame-options":"DENY"}
+[2026-07-06T18:43:25.190Z] Raw body: {"client_name":"José","client_phone":"74000000","basket_id":"dc977e41-be87-4559-a594-71eabf1ebaf0","items":[]}
+[2026-07-06T18:43:25.190Z] Parsed client_name: "José"
+[2026-07-06T18:43:25.191Z] Parsed client_phone: "74000000"
+[2026-07-06T18:43:25.192Z] Cleaned phone: 74000000
+[2026-07-06T18:43:25.299Z] Existing customer for 74000000: 93ba3966 Maria
+[2026-07-06T18:43:25.300Z] Reusing customer: 93ba3966
+[2026-07-06T18:43:25.421Z] Order created: a49cc93f protocol=CP-000005
+[2026-07-06T18:43:25.603Z] Response: customer=93ba3966 protocol=CP-000005
+[2026-07-06T18:43:25.604Z] === FIM ===

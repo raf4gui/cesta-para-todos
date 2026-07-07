@@ -1,0 +1,35 @@
+create or replace function reset_system()
+returns jsonb
+language plpgsql
+security definer
+as $$
+declare
+  v_result jsonb;
+begin
+  delete from order_notes;
+  delete from order_status_history;
+  delete from order_items;
+  delete from nfe_emissions;
+  delete from contas_receber;
+  delete from orders;
+  delete from customers;
+  delete from stock_movements;
+  delete from financial_entries;
+  delete from financial_alerts;
+  delete from recurring_expenses;
+  delete from admin_notes;
+  delete from report_cache;
+
+  alter sequence if exists order_protocol_seq restart with 1;
+
+  update nfe_config set ultimo_numero_nfe = 0, ultimo_numero_nfce = 0 where id = true;
+  update products set stock = 0;
+
+  select jsonb_build_object(
+    'success', true,
+    'message', 'Sistema restaurado com sucesso. Todos os dados operacionais foram removidos.'
+  ) into v_result;
+
+  return v_result;
+end;
+$$;

@@ -1,0 +1,17 @@
+alter table nfe_config add column if not exists razao_social text;
+alter table nfe_config add column if not exists nome_fantasia text;
+alter table nfe_config add column if not exists cnpj text;
+alter table nfe_config add column if not exists ie text;
+alter table nfe_config add column if not exists im text;
+alter table nfe_config add column if not exists endereco text;
+alter table nfe_config add column if not exists numero text;
+alter table nfe_config add column if not exists complemento text;
+alter table nfe_config add column if not exists bairro text;
+alter table nfe_config add column if not exists cidade text;
+alter table nfe_config add column if not exists estado text;
+alter table nfe_config add column if not exists cep text;
+alter table nfe_config add column if not exists telefone text;
+alter table nfe_config add column if not exists email text;
+alter table nfe_config add column if not exists regime_tributario text default 'simples_nacional';
+alter table nfe_config add column if not exists observacoes_padrao text;
+alter table nfe_config add column if not exists logo_url text;

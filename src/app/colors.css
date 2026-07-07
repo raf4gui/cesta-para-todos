@@ -1,0 +1,15 @@
+/* src/app/colors.css */
+:root {
+  /* Primary: elegant green */
+  --color-primary: hsl(150, 70%, 40%);
+  --color-primary-foreground: hsl(0, 0%, 100%);
+  /* Secondary: soft yellow */
+  --color-secondary: hsl(45, 90%, 55%);
+  --color-secondary-foreground: hsl(0, 0%, 0%);
+}
+
+/* Dark mode overrides */
+.dark {
+  --color-primary: hsl(150, 50%, 30%);
+  --color-secondary: hsl(45, 70%, 45%);
+}

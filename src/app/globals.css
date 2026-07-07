@@ -1,0 +1,310 @@
+@import "tailwindcss";
+@import "./typography.css";
+@import "./animations.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-outfit), var(--font-sans);
+  --font-secondary: var(--font-inter), sans-serif;
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-outfit);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  /* #FFFFFF */
+  --foreground: oklch(0.35 0 0);
+  /* #444444 */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.35 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.35 0 0);
+  --primary: oklch(0.428 0.129 148.6);
+  /* #006B2E (Verde principal) */
+  --primary-foreground: oklch(1 0 0);
+  /* Branco */
+  --secondary: oklch(0.672 0.22 47.9);
+  /* #FF6A00 (Laranja principal) */
+  --secondary-foreground: oklch(1 0 0);
+  /* Branco */
+  --muted: oklch(0.97 0 0);
+  /* #F5F5F5 */
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  /* #F5F5F5 */
+  --accent-foreground: oklch(0.35 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.93 0 0);
+  /* #EAEAEA */
+  --input: oklch(0.93 0 0);
+  /* #EAEAEA */
+  --ring: oklch(0.428 0.129 148.6);
+  /* #006B2E */
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.875rem;
+  --sidebar: oklch(0.97 0 0);
+  /* #F5F5F5 */
+  --sidebar-foreground: oklch(0.35 0 0);
+  --sidebar-primary: oklch(0.428 0.129 148.6);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.93 0 0);
+  --sidebar-accent-foreground: oklch(0.35 0 0);
+  --sidebar-border: oklch(0.93 0 0);
+  --sidebar-ring: oklch(0.428 0.129 148.6);
+}
+
+/* Brand color token shortcuts (hex for easier use) */
+:root {
+  --brand-primary: #006B2E;
+  --brand-secondary: #FF6A00;
+  --brand-muted: #F5F5F5;
+}
+
+.dark {
+  --background: oklch(0.15 0 0);
+  --foreground: oklch(0.95 0 0);
+  --card: oklch(0.2 0 0);
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.2 0 0);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(0.528 0.129 148.6);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.7 0.22 47.9);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --accent: oklch(0.25 0 0);
+  --accent-foreground: oklch(0.95 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.528 0.129 148.6);
+  --sidebar: oklch(0.2 0 0);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.528 0.129 148.6);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.25 0 0);
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.528 0.129 148.6);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    color: var(--foreground);
+    font-family: var(--font-sans);
+
+    background:
+      radial-gradient(circle at top left,
+        rgba(0, 107, 46, 0.25) 0%,
+        transparent 45%),
+      radial-gradient(circle at bottom right,
+        rgba(255, 106, 0, 0.22) 0%,
+        transparent 45%),
+      linear-gradient(180deg,
+        #ffffff 0%,
+        #e8f7ed 40%,
+        #dff4e6 70%,
+        #fff1e5 100%);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+
+  /* Smooth rounded design tokens */
+  .rounded-soft {
+    border-radius: calc(var(--radius) * 0.9);
+  }
+
+  /* Buttons touch targets */
+  .btn-touch {
+    padding: 0.85rem 1rem;
+    border-radius: 0.75rem;
+  }
+
+  /* Section rhythm */
+  .section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    .section {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+
+  /* Utility: subtle card */
+  .card {
+    background: var(--card);
+    color: var(--card-foreground);
+    border-radius: calc(var(--radius) * 0.8);
+    box-shadow: 0 6px 20px rgba(16, 24, 40, 0.04);
+  }
+
+  /* Brand buttons */
+  .btn-primary {
+    background: var(--brand-primary);
+    color: white;
+  }
+
+  .btn-secondary {
+    background: var(--brand-secondary);
+    color: white;
+  }
+
+  /* Page container rhythm */
+  .container-lg {
+    max-width: 1120px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Header elevated during scroll - helper class applied client-side */
+  .header-elevated {
+    box-shadow: 0 8px 30px rgba(2, 6, 23, 0.08);
+  }
+
+  /* Micro spacing tokens - use for consistent small gaps */
+  :root {
+    --space-xxs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 24px;
+  }
+
+  /* Subtle elevation and hover states for product cards */
+  .card-elevated {
+    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+    transition: box-shadow 160ms ease, transform 160ms ease;
+  }
+
+  .card-elevated:hover {
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.06);
+    transform: translateY(-4px);
+  }
+
+  /* Compact utilities for admin density */
+  .compact-row {
+    padding-top: calc(var(--space-xxs));
+    padding-bottom: calc(var(--space-xxs));
+  }
+
+  /* Consistent small badge */
+  .badge-small {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.7rem;
+    border-radius: 9999px;
+  }
+
+  /* Form controls sizing for consistent rhythm */
+  input,
+  textarea,
+  select {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+
+  /* Buttons consistent height */
+  button {
+    line-height: 1;
+  }
+}
+
+.heroMascot {
+  width: 100%;
+  max-width: 540px;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.hero-gradient {
+  background:
+    radial-gradient(circle at center,
+      rgba(0, 107, 46, 0.18),
+      transparent 60%);
+}
+
+.page-gradient {
+  background:
+    linear-gradient(135deg,
+      rgba(0, 107, 46, 0.05),
+      rgba(255, 106, 0, 0.05));
+}
+
+/* ── Print layout ── */
+body:has(.print-root) {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: auto !important;
+  overflow: auto !important;
+  display: block !important;
+}
+.print-root {
+  width: 100vw;
+  min-height: 100vh;
+  background: white;
+  position: relative;
+}
+@media print {
+  body > *:not(.print-root) { display: none !important; }
+  .print-root { width: 100% !important; height: auto !important; min-height: auto !important; position: static !important; }
+}

@@ -1,0 +1,94 @@
+2026-06-30T23:08:58.772Z === SUBMIT ORDER CALLED ===
+2026-06-30T23:08:58.772Z PASSO 1 - Nome recebido: Maria
+2026-06-30T23:08:58.773Z PASSO 2 - Telefone recebido: 11111111111
+2026-06-30T23:08:58.773Z Payload completo: {
+  "client_name": "Maria",
+  "client_phone": "11111111111",
+  "items": []
+}
+2026-06-30T23:08:59.823Z === SUBMIT ORDER CALLED ===
+2026-06-30T23:08:59.823Z PASSO 1 - Nome recebido: Fernando
+2026-06-30T23:08:59.824Z PASSO 2 - Telefone recebido: 22222222222
+2026-06-30T23:08:59.824Z Payload completo: {
+  "client_name": "Fernando",
+  "client_phone": "22222222222",
+  "items": []
+}
+2026-06-30T23:15:25.859Z === SUBMIT ORDER CALLED ===
+2026-06-30T23:15:25.860Z PASSO 1 - Nome recebido: Carla
+2026-06-30T23:15:25.861Z PASSO 2 - Telefone recebido: 74999581805
+2026-06-30T23:15:25.862Z Payload completo: {
+  "client_name": "Carla",
+  "client_phone": "74999581805",
+  "basket_id": "e0671d18-4b7d-41ff-a5db-b93a89e99c9d",
+  "items": [
+    {
+      "product_id": "a89bee31-45bd-4834-b335-a24cf4f4ef8d",
+      "quantity": 2
+    },
+    {
+      "product_id": "b2c9a011-1657-4853-a741-d70aecc04fb6",
+      "quantity": 4
+    },
+    {
+      "product_id": "8572420d-6028-47c9-ac01-09cdc220cf51",
+      "quantity": 3
+    },
+    {
+      "product_id": "7008e44c-1609-4905-a6f8-79bcce72e627",
+      "quantity": 2
+    },
+    {
+      "product_id": "16f00269-aec1-4bb4-83fc-a0df14e95de4",
+      "quantity": 1
+    },
+    {
+      "product_id": "3a097bed-88d2-4eb9-a3e9-bd9867df918b",
+      "quantity": 1
+    },
+    {
+      "product_id": "ad5e4dbf-8207-4fb2-9ce7-2e516e5ec0ea",
+      "quantity": 1
+    },
+    {
+      "product_id": "81bffe3b-a6d4-4de9-8ec2-e74324adc45e",
+      "quantity": 1
+    },
+    {
+      "product_id": "e6c391a4-7a64-4472-ae64-08aba451c7d9",
+      "quantity": 4
+    },
+    {
+      "product_id": "9a320a50-5c0a-4f82-9669-c8c0e4767394",
+      "quantity": 2
+    },
+    {
+      "product_id": "d4e93902-f1ea-4d3c-b8e6-cceae2085af4",
+      "quantity": 2
+    },
+    {
+      "product_id": "db15a461-53f5-4351-874d-7bfbe2dfd464",
+      "quantity": 1
+    },
+    {
+      "product_id": "0d967e29-f221-4a3c-be6f-5f31ed0bb56f",
+      "quantity": 1
+    },
+    {
+      "product_id": "14f1cab5-a717-4e11-8598-e3371d849331",
+      "quantity": 1
+    },
+    {
+      "product_id": "a16118cd-22e0-4cb0-ab18-ad936a9da99e",
+      "quantity": 2
+    },
+    {
+      "product_id": "6fbd3e13-d269-4671-80e3-456620e87dc5",
+      "quantity": 1
+    },
+    {
+      "product_id": "03b4ae04-2e70-4a41-bc8a-86efa14f2c72",
+      "quantity": 1
+    }
+  ]
+}
