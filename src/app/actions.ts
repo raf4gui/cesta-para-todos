@@ -18,11 +18,14 @@ export async function getPublicCatalogItems() {
 
   const { data: baskets, error: basketsErr } = await sb
     .from("baskets")
-    .select("id, name, description, image_url, tipo, brand_id, brand:brands!baskets_brand_id_fkey(name), quantidade_fardo")
+    .select("id, name, description, image_url, tipo, brand_id, brand:brands(name), quantidade_fardo")
     .eq("ativo", true)
     .order("name")
 
-  if (basketsErr) throw basketsErr
+  if (basketsErr) {
+    console.error("Catalog baskets query error:", basketsErr.message, basketsErr.details, basketsErr.hint)
+    throw new Error(`Baskets query: ${basketsErr.message}`)
+  }
 
   const basketIds = (baskets ?? []).map((b) => b.id)
   let basketItems: BasketItemRow[] = []
@@ -30,17 +33,22 @@ export async function getPublicCatalogItems() {
   if (basketIds.length > 0) {
     const { data: items, error: itemsErr } = await sb
       .from("basket_items")
-      .select("basket_id, product_id, quantity, product:products(name, peso, volume, unidade, brand:brands!products_brand_id_fkey(name))")
+      .select("basket_id, product_id, quantity, product:products(name, peso, volume, unidade, brand:brands(name))")
       .in("basket_id", basketIds)
 
     if (!itemsErr && items) basketItems = items as any
   }
 
-  const { data: catProducts } = await sb
+  const { data: catProducts, error: catErr } = await sb
     .from("products")
-    .select("id, name, description, image_url, stock, sale_price, peso, volume, unidade, brand_id, brand:brands!products_brand_id_fkey(id, name), category:categories!products_category_id_fkey(name)")
+    .select("id, name, description, image_url, stock, sale_price, peso, volume, unidade, brand_id, brand:brands(id, name), category:categories(name)")
     .eq("ativo", true)
     .order("name")
+
+  if (catErr) {
+    console.error("Catalog products query error:", catErr.message, catErr.details, catErr.hint)
+    throw new Error(`Products query: ${catErr.message}`)
+  }
 
   return { items: baskets ?? [], basketItems, products: catProducts ?? [] }
 }
@@ -52,7 +60,7 @@ export async function getPublicProductsForCustomizer() {
   try {
     const { data, error: prodErr } = await sb
       .from("products")
-      .select("id, name, description, image_url, stock, sale_price, purchase_price, peso, volume, unidade, brand_id, brand:brands!products_brand_id_fkey(id, name, ativo), category:categories!products_category_id_fkey(id, name)")
+      .select("id, name, description, image_url, stock, sale_price, purchase_price, peso, volume, unidade, brand_id, brand:brands(id, name, ativo), category:categories(id, name)")
       .eq("ativo", true)
       .eq("allow_personalization", true)
       .order("personalization_order", { ascending: true })
@@ -63,7 +71,7 @@ export async function getPublicProductsForCustomizer() {
     // Fallback if personalization_order column doesn't exist yet
     const { data, error: prodErr } = await sb
       .from("products")
-      .select("id, name, description, image_url, stock, sale_price, purchase_price, peso, volume, unidade, brand_id, brand:brands!products_brand_id_fkey(id, name, ativo), category:categories!products_category_id_fkey(id, name)")
+      .select("id, name, description, image_url, stock, sale_price, purchase_price, peso, volume, unidade, brand_id, brand:brands(id, name, ativo), category:categories(id, name)")
       .eq("ativo", true)
       .eq("allow_personalization", true)
       .order("name", { ascending: true })
@@ -84,7 +92,7 @@ export async function getPublicProductsForCustomizer() {
   if (productIds.length > 0) {
     const { data: pbs } = await sb
       .from("product_brands")
-      .select("product_id, brand_id, brand:brands!product_brands_brand_id_fkey(id, name)")
+      .select("product_id, brand_id, brand:brands(id, name)")
       .in("product_id", productIds)
       .eq("ativo", true)
     if (pbs) productBrands = pbs
@@ -98,7 +106,7 @@ export async function getPublicBasketDetails(basketId: string) {
 
   const { data: basket, error: basketErr } = await sb
     .from("baskets")
-    .select("id, name, description, image_url, tipo, brand_id, brand:brands!baskets_brand_id_fkey(name), quantidade_fardo")
+    .select("id, name, description, image_url, tipo, brand_id, brand:brands(name), quantidade_fardo")
     .eq("id", basketId)
     .eq("ativo", true)
     .single()
@@ -107,14 +115,14 @@ export async function getPublicBasketDetails(basketId: string) {
 
   const { data: items, error: itemsErr } = await sb
     .from("basket_items")
-    .select("*, product:products(id, name, sale_price, brand_id, brand:brands!products_brand_id_fkey(id, name), peso, volume, unidade)")
+    .select("*, product:products(id, name, sale_price, brand_id, brand:brands(id, name), peso, volume, unidade)")
     .eq("basket_id", basketId)
 
   if (itemsErr) throw itemsErr
 
   const { data: itemBrands, error: itemBrandsErr } = await sb
     .from("basket_item_brands")
-    .select("*, brand:brands!basket_item_brands_brand_id_fkey(id, name)")
+    .select("*, brand:brands(id, name)")
     .eq("basket_id", basketId)
 
   if (itemBrandsErr) throw itemBrandsErr
@@ -253,7 +261,7 @@ export async function submitOrder(payload: {
   // Fetch default product prices for fallback
   const { data: products } = await sb
     .from("products")
-    .select("id, name, sale_price, purchase_price, brand_id, brand:brands!products_brand_id_fkey(id, name), peso, volume, unidade")
+    .select("id, name, sale_price, purchase_price, brand_id, brand:brands(id, name), peso, volume, unidade")
     .in("id", productIds)
 
   const productsMap = (products ?? []).reduce<Record<string, any>>((acc, p) => ({ ...acc, [p.id]: p }), {})
@@ -282,7 +290,7 @@ export async function submitOrder(payload: {
 
   const { data: fullOrder, error: fullOrderErr } = await sb
     .from("orders")
-    .select("*, basket:baskets!orders_basket_id_fkey(name)")
+    .select("*, basket:baskets(name)")
     .eq("id", order.id)
     .single()
 
