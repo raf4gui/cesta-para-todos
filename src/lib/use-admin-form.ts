@@ -40,6 +40,11 @@ export function useAdminForm<T extends FieldValues>({
     return merged as unknown as T
   }, [rawDefaults, initialData])
 
+  const resolver = useMemo(() => {
+    const s = isEditing ? (schema as any).partial() : schema
+    return zodResolver(s as any) as any
+  }, [schema, isEditing])
+
   const {
     formState: { errors },
     setError,
@@ -52,7 +57,7 @@ export function useAdminForm<T extends FieldValues>({
     setValue,
     trigger,
   } = useForm<T>({
-    resolver: zodResolver(schema as any) as any,
+    resolver,
     defaultValues: safeDefaults as any,
   })
 
@@ -66,18 +71,14 @@ export function useAdminForm<T extends FieldValues>({
       clearErrors()
 
       try {
-        const isValid = await trigger()
-        if (!isValid) {
-          setValidationSummary("Verifique os campos destacados e corrija os erros antes de salvar.")
-          return
-        }
-
         const data = getValues()
 
         if (isEditing && onUpdate) {
           await onUpdate(initialData?.id ?? "singleton", data as Partial<T>)
         } else if (!isEditing && onCreate) {
-          await onCreate(data as T)
+          const isValid = await trigger()
+          if (!isValid) return
+          await onCreate(getValues() as T)
         }
       } catch (error: any) {
         console.error("Erro no salvamento do formulário:", error)
@@ -86,7 +87,7 @@ export function useAdminForm<T extends FieldValues>({
         setSubmitting(false)
       }
     },
-    [isEditing, submitting, trigger, clearErrors, getValues, onUpdate, onCreate, initialData],
+    [isEditing, submitting, trigger, getValues, onUpdate, onCreate, initialData],
   )
 
   const dirtySetValue = useCallback(
