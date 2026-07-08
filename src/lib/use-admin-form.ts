@@ -3,7 +3,7 @@
 import { useForm, type Path, type FieldValues } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 type AdminFormOptions<T extends FieldValues> = {
   schema: z.ZodType<T>
@@ -32,6 +32,7 @@ export function useAdminForm<T extends FieldValues>({
   onCreate,
 }: AdminFormOptions<T>) {
   const isEditing = !!initialData?.id || (!onCreate && !!onUpdate)
+  const [submitting, setSubmitting] = useState(false)
 
   const safeDefaults = useMemo(() => {
     const merged = { ...rawDefaults, ...cleanNulls(initialData) }
@@ -39,7 +40,7 @@ export function useAdminForm<T extends FieldValues>({
   }, [rawDefaults, initialData])
 
   const {
-    formState: { isSubmitting, errors },
+    formState: { errors },
     setError,
     clearErrors,
     getValues,
@@ -57,37 +58,42 @@ export function useAdminForm<T extends FieldValues>({
   const submit = useCallback(
     async (e?: React.BaseSyntheticEvent) => {
       if (e) e.preventDefault()
-      if (isSubmitting) return
+      if (submitting) return
 
-      const data = getValues()
+      setSubmitting(true)
+      try {
+        const data = getValues()
 
-      if (isEditing && onUpdate) {
-        const result = (schema as unknown as z.ZodObject<any>).partial().safeParse(data)
-        if (!result.success) {
-          for (const issue of result.error.issues) {
-            const path = issue.path[0] as Path<T>
-            setError(path, { message: issue.message })
+        if (isEditing && onUpdate) {
+          const result = (schema as unknown as z.ZodObject<any>).partial().safeParse(data)
+          if (!result.success) {
+            for (const issue of result.error.issues) {
+              const path = issue.path[0] as Path<T>
+              setError(path, { message: issue.message })
+            }
+            return
           }
-          return
-        }
 
-        clearErrors()
-        await onUpdate(initialData?.id ?? "singleton", result.data as Partial<T>)
-      } else if (!isEditing && onCreate) {
-        const result = (schema as unknown as z.ZodObject<any>).safeParse(data)
-        if (!result.success) {
-          for (const issue of result.error.issues) {
-            const path = issue.path[0] as Path<T>
-            setError(path, { message: issue.message })
+          clearErrors()
+          await onUpdate(initialData?.id ?? "singleton", result.data as Partial<T>)
+        } else if (!isEditing && onCreate) {
+          const result = (schema as unknown as z.ZodObject<any>).safeParse(data)
+          if (!result.success) {
+            for (const issue of result.error.issues) {
+              const path = issue.path[0] as Path<T>
+              setError(path, { message: issue.message })
+            }
+            return
           }
-          return
-        }
 
-        clearErrors()
-        await onCreate(result.data as T)
+          clearErrors()
+          await onCreate(result.data as T)
+        }
+      } finally {
+        setSubmitting(false)
       }
     },
-    [isEditing, isSubmitting, getValues, schema, setError, clearErrors, onUpdate, onCreate, initialData],
+    [isEditing, submitting, getValues, schema, setError, clearErrors, onUpdate, onCreate, initialData],
   )
 
   const dirtySetValue = useCallback(
@@ -105,7 +111,7 @@ export function useAdminForm<T extends FieldValues>({
     reset,
     trigger,
     errors,
-    isSubmitting,
+    isSubmitting: submitting,
     isEditing,
     submit,
   }

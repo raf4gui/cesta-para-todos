@@ -7,6 +7,20 @@ import { optionalUuid } from "@/lib/zod-helpers"
 
 const sb = () => supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
+function revalidateBasketPaths(basketId?: string) {
+  revalidatePath("/admin/cestas")
+  revalidatePath("/admin/cestas-prontas")
+  revalidatePath("/admin/kits")
+  revalidatePath("/admin/fardos")
+  revalidatePath("/")
+  if (basketId) {
+    revalidatePath(`/admin/cestas/${basketId}`)
+    revalidatePath(`/admin/cestas-prontas/${basketId}`)
+    revalidatePath(`/admin/kits/${basketId}`)
+    revalidatePath(`/admin/fardos/${basketId}`)
+  }
+}
+
 const BASKET_TYPES = ["CESTA_PRATICA", "CESTA_COMPLETA", "CESTAO_FAMILIA", "CESTA_PERSONALIZADA", "KIT", "FARDO"] as const
 
 const basketSchema = z.object({
@@ -59,8 +73,7 @@ export async function createBasket(payload: any) {
   const parsed = basketSchema.parse(payload)
   const { data, error } = await sb().from("baskets").insert(parsed).select().single()
   if (error) throw new Error(error.message)
-  revalidatePath("/admin/cestas")
-  revalidatePath("/")
+  revalidateBasketPaths()
   return data
 }
 
@@ -68,24 +81,21 @@ export async function updateBasket(id: string, payload: any) {
   const parsed = basketSchema.partial().parse(payload)
   const { data, error } = await sb().from("baskets").update(parsed).eq("id", id).select().single()
   if (error) throw new Error(error.message)
-  revalidatePath("/admin/cestas")
-  revalidatePath("/")
+  revalidateBasketPaths(id)
   return data
 }
 
 export async function deleteBasket(id: string) {
   const { error } = await sb().from("baskets").update({ ativo: false }).eq("id", id)
   if (error) throw new Error(error.message)
-  revalidatePath("/admin/cestas")
-  revalidatePath("/")
+  revalidateBasketPaths(id)
   return { success: true }
 }
 
 export async function toggleBasketStatus(id: string, ativo: boolean) {
   const { error } = await sb().from("baskets").update({ ativo }).eq("id", id)
   if (error) throw new Error(error.message)
-  revalidatePath("/admin/cestas")
-  revalidatePath("/")
+  revalidateBasketPaths(id)
   return { success: true }
 }
 
@@ -117,8 +127,7 @@ export async function duplicateBasket(id: string) {
     if (ie) throw new Error(ie.message)
   }
 
-  revalidatePath("/admin/cestas")
-  revalidatePath("/")
+  revalidateBasketPaths()
   return data
 }
 
@@ -151,8 +160,7 @@ export async function excludeBasket(id: string) {
   const { error } = await sb().from("baskets").delete().eq("id", id)
   if (error) throw new Error(error.message)
 
-  revalidatePath("/admin/cestas")
-  revalidatePath("/")
+  revalidateBasketPaths()
   return { success: true }
 }
 
@@ -166,32 +174,52 @@ export async function listAllBrands() {
   return data ?? []
 }
 
-export async function uploadImage(formData: FormData) {
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"]
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
+
+function validateImageFile(file: File) {
+  if (!file) throw new Error("Nenhum arquivo enviado.")
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    throw new Error(`Formato não aceito: ${file.type || "desconhecido"}. Use JPG, JPEG, PNG ou WEBP.`)
+  }
+  if (file.size > MAX_IMAGE_SIZE) {
+    throw new Error(`Arquivo muito grande (${(file.size / 1024 / 1024).toFixed(1)}MB). Máximo permitido: 10MB.`)
+  }
+}
+
+async function uploadFile(formData: FormData, prefix: string): Promise<string> {
   const file = formData.get("file") as File
-  if (!file) throw new Error("Nenhum arquivo enviado")
-  const fileExt = file.name.split(".").pop()
-  const fileName = `basket_${Date.now()}.${fileExt}`
-  const { error } = await sb().storage.from("images").upload(fileName, file, { upsert: true })
-  if (error) throw new Error("Falha no upload: " + error.message)
+  validateImageFile(file)
+
+  const ext = file.type.split("/")[1] === "jpeg" ? "jpg" : file.type.split("/")[1]
+  const fileName = `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`
+
+  const { error } = await sb().storage.from("images").upload(fileName, file, {
+    contentType: file.type,
+    upsert: true,
+  })
+  if (error) {
+    if (error.message?.includes("policy")) {
+      throw new Error("Upload negado pela política de segurança do Storage. Verifique as permissões do bucket 'images' no Supabase.")
+    }
+    throw new Error("Falha no upload: " + error.message)
+  }
   const { data } = sb().storage.from("images").getPublicUrl(fileName)
   return data.publicUrl
 }
 
+export async function uploadImage(formData: FormData) {
+  return uploadFile(formData, "basket")
+}
+
 export async function uploadProductImage(formData: FormData) {
-  const file = formData.get("file") as File
-  if (!file) throw new Error("Nenhum arquivo enviado")
-  const fileExt = file.name.split(".").pop()
-  const fileName = `product_${Date.now()}.${fileExt}`
-  const { error } = await sb().storage.from("images").upload(fileName, file, { upsert: true })
-  if (error) throw new Error("Falha no upload: " + error.message)
-  const { data } = sb().storage.from("images").getPublicUrl(fileName)
-  return data.publicUrl
+  return uploadFile(formData, "product")
 }
 
 export async function saveBasketItems(basketId: string, items: Array<{ product_id: string; quantity: number; is_customizable: boolean; allowed_brand_ids?: string[] }>) {
   await sb().from("basket_items").delete().eq("basket_id", basketId)
   await sb().from("basket_item_brands").delete().eq("basket_id", basketId)
-  if (items.length === 0) { revalidatePath(`/admin/cestas/${basketId}`); return { success: true } }
+  if (items.length === 0) { revalidateBasketPaths(basketId); return { success: true } }
   const { error } = await sb().from("basket_items").insert(items.map((i) => ({ basket_id: basketId, product_id: i.product_id, quantity: i.quantity, is_customizable: i.is_customizable })))
   if (error) throw new Error(error.message)
   for (const item of items) {
@@ -200,6 +228,6 @@ export async function saveBasketItems(basketId: string, items: Array<{ product_i
       if (be) throw new Error(be.message)
     }
   }
-  revalidatePath(`/admin/cestas/${basketId}`)
+  revalidateBasketPaths(basketId)
   return { success: true }
 }

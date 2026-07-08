@@ -2,6 +2,7 @@
 
 import { supabaseAdmin } from "@/lib/supabase"
 import { normalizePhone } from "@/lib/zod-helpers"
+import { revalidatePath } from "next/cache"
 
 export async function getWhatsAppPhone() {
   const sb = supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!)
@@ -369,6 +370,8 @@ export async function submitOrder(payload: {
   const { data: settings } = await supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!).from("store_settings").select("whatsapp_phone").eq("id", true).single()
   const storePhone = settings?.whatsapp_phone || ""
   const whatsappUrl = `https://api.whatsapp.com/send?phone=${storePhone}&text=${encodeURIComponent(messageText)}`
+
+  revalidatePath("/")
 
   // PASSO 10 - Redirecionando para WhatsApp
   console.log("PASSO 10 - Redirecionando para WhatsApp")

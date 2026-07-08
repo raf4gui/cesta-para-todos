@@ -73,6 +73,7 @@ export function ProductForm({ initialData }: Props) {
   const [isUploading, setIsUploading] = useState(false)
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const MAX_IMG_DIM = 1920
 
   const { register, control, errors, isSubmitting, watch, setValue, submit } = useAdminForm({
     schema: formSchema,
@@ -120,12 +121,40 @@ export function ProductForm({ initialData }: Props) {
     setUploadError("")
     setIsUploading(true)
     try {
+      const allowed = ["image/jpeg", "image/png", "image/webp"]
+      if (!allowed.includes(file.type)) {
+        throw new Error(`Formato não aceito: ${file.type || "desconhecido"}. Use JPG, JPEG, PNG ou WEBP.`)
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error(`Arquivo muito grande (${(file.size / 1024 / 1024).toFixed(1)}MB). Máximo: 10MB.`)
+      }
+
+      let uploadFile = file
+      if (file.size > 1024 * 1024) {
+        const canvas = document.createElement("canvas")
+        const bitmap = await createImageBitmap(file)
+        let w = bitmap.width, h = bitmap.height
+        if (w > MAX_IMG_DIM || h > MAX_IMG_DIM) {
+          const ratio = Math.min(MAX_IMG_DIM / w, MAX_IMG_DIM / h)
+          w = Math.round(w * ratio); h = Math.round(h * ratio)
+        }
+        canvas.width = w; canvas.height = h
+        const ctx = canvas.getContext("2d")!
+        ctx.drawImage(bitmap, 0, 0, w, h)
+        const quality = file.size > 5 * 1024 * 1024 ? 0.6 : 0.8
+        const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, "image/jpeg", quality))
+        if (blob) uploadFile = new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), { type: "image/jpeg" })
+      }
+
       const formData = new FormData()
-      formData.append("file", file)
+      formData.append("file", uploadFile)
       const url = await uploadProductImage(formData)
       setValue("image_url", url)
     } catch (err: any) { setUploadError(err.message || "Erro inesperado no upload.") }
-    finally { setIsUploading(false) }
+    finally {
+      setIsUploading(false)
+      if (e.target) e.target.value = ""
+    }
   }
 
   return (
@@ -271,7 +300,7 @@ export function ProductForm({ initialData }: Props) {
               <p className="text-sm text-gray-500">{isUploading ? "Enviando..." : "Clique para fazer upload"}</p>
               <p className="text-xs text-gray-400">PNG, JPG, WEBP</p>
             </div>
-            <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={isUploading} />
+            <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleImageUpload} disabled={isUploading} />
             <Input placeholder="Ou cole uma URL de imagem" {...register("image_url")} />
             {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
           </div>

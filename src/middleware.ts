@@ -33,10 +33,15 @@ function buildSecurityHeaders() {
   }
 }
 
-function addSecurityHeaders(response: NextResponse) {
+function addSecurityHeaders(response: NextResponse, pathname: string) {
   const headers = buildSecurityHeaders()
   for (const [key, value] of Object.entries(headers)) {
     response.headers.set(key, value)
+  }
+  if (!pathname.startsWith("/_next") && !pathname.includes(".")) {
+    response.headers.set("Cache-Control", "private, no-cache, no-store, must-revalidate")
+    response.headers.set("Pragma", "no-cache")
+    response.headers.set("Expires", "0")
   }
   return response
 }
@@ -68,7 +73,7 @@ export function middleware(request: NextRequest) {
     response = NextResponse.next()
   }
 
-  addSecurityHeaders(response)
+  addSecurityHeaders(response, pathname)
   return response
 }
 

@@ -288,7 +288,7 @@ for (const item of items) {
                   <Badge variant="outline" className="border-[#006B2E] text-[#006B2E] font-bold uppercase text-xs">
                     {formatTipo(basket.tipo)}
                   </Badge>
-                  {basket.brand?.name && (
+                  {isFardo && basket.brand?.name && (
                     <Badge variant="secondary" className="text-xs">{Array.isArray(basket.brand) ? basket.brand[0]?.name : basket.brand?.name}</Badge>
                   )}
                 </div>
