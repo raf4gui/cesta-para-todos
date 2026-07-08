@@ -26,7 +26,7 @@ export default function CategoryForm({ initialData }: { initialData?: CategoryFo
   const router = useRouter()
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null)
 
-  const { register, control, errors, isSubmitting, submit } = useAdminForm({
+  const { register, control, errors, isSubmitting, submit, validationSummary } = useAdminForm({
     schema: CategoryFormSchema,
     defaultValues: DEFAULTS,
     initialData,
@@ -59,6 +59,12 @@ export default function CategoryForm({ initialData }: { initialData?: CategoryFo
       {feedback && (
         <div className={`rounded-lg border p-3 text-sm font-medium ${feedback.type === "success" ? "border-green-200 bg-green-50 text-green-700" : "border-red-200 bg-red-50 text-red-700"}`}>
           {feedback.message}
+        </div>
+      )}
+
+      {validationSummary && (
+        <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm font-medium text-red-700">
+          {validationSummary}
         </div>
       )}
 

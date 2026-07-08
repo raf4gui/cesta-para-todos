@@ -1,6 +1,6 @@
 "use client"
 
-import { useForm, type Path, type FieldValues } from "react-hook-form"
+import { useForm, type FieldValues } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useCallback, useMemo, useState } from "react"
@@ -33,6 +33,7 @@ export function useAdminForm<T extends FieldValues>({
 }: AdminFormOptions<T>) {
   const isEditing = !!initialData?.id || (!onCreate && !!onUpdate)
   const [submitting, setSubmitting] = useState(false)
+  const [validationSummary, setValidationSummary] = useState<string | null>(null)
 
   const safeDefaults = useMemo(() => {
     const merged = { ...rawDefaults, ...cleanNulls(initialData) }
@@ -61,39 +62,31 @@ export function useAdminForm<T extends FieldValues>({
       if (submitting) return
 
       setSubmitting(true)
+      setValidationSummary(null)
+      clearErrors()
+
       try {
+        const isValid = await trigger()
+        if (!isValid) {
+          setValidationSummary("Verifique os campos destacados e corrija os erros antes de salvar.")
+          return
+        }
+
         const data = getValues()
 
         if (isEditing && onUpdate) {
-          const result = (schema as unknown as z.ZodObject<any>).partial().safeParse(data)
-          if (!result.success) {
-            for (const issue of result.error.issues) {
-              const path = issue.path[0] as Path<T>
-              setError(path, { message: issue.message })
-            }
-            return
-          }
-
-          clearErrors()
-          await onUpdate(initialData?.id ?? "singleton", result.data as Partial<T>)
+          await onUpdate(initialData?.id ?? "singleton", data as Partial<T>)
         } else if (!isEditing && onCreate) {
-          const result = (schema as unknown as z.ZodObject<any>).safeParse(data)
-          if (!result.success) {
-            for (const issue of result.error.issues) {
-              const path = issue.path[0] as Path<T>
-              setError(path, { message: issue.message })
-            }
-            return
-          }
-
-          clearErrors()
-          await onCreate(result.data as T)
+          await onCreate(data as T)
         }
+      } catch (error: any) {
+        console.error("Erro no salvamento do formulário:", error)
+        setValidationSummary(error?.message || "Erro inesperado ao salvar. Tente novamente.")
       } finally {
         setSubmitting(false)
       }
     },
-    [isEditing, submitting, getValues, schema, setError, clearErrors, onUpdate, onCreate, initialData],
+    [isEditing, submitting, trigger, clearErrors, getValues, onUpdate, onCreate, initialData],
   )
 
   const dirtySetValue = useCallback(
@@ -114,5 +107,7 @@ export function useAdminForm<T extends FieldValues>({
     isSubmitting: submitting,
     isEditing,
     submit,
+    validationSummary,
+    setValidationSummary,
   }
 }

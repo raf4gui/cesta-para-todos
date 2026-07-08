@@ -32,7 +32,7 @@ export function CustomerForm({ initialData }: Props) {
   const router = useRouter()
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null)
 
-  const { register, control, errors, isSubmitting, submit } = useAdminForm({
+  const { register, control, errors, isSubmitting, submit, validationSummary } = useAdminForm({
     schema: formSchema,
     defaultValues: DEFAULTS,
     initialData,
@@ -59,6 +59,12 @@ export function CustomerForm({ initialData }: Props) {
   return (
     <form onSubmit={submit} noValidate className="space-y-6">
       {feedback && <div className={`rounded-lg border p-3 text-sm font-medium ${feedback.type === "success" ? "border-green-200 bg-green-50 text-green-700" : "border-red-200 bg-red-50 text-red-700"}`}>{feedback.message}</div>}
+
+      {validationSummary && (
+        <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm font-medium text-red-700">
+          {validationSummary}
+        </div>
+      )}
 
       <div className="space-y-4">
         <h3 className="text-base font-bold border-b pb-2 text-[#102016]">Informações Pessoais</h3>

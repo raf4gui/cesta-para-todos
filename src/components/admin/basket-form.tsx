@@ -53,7 +53,7 @@ export default function BasketForm({ initialData, redirectPath = "/admin/cestas"
   const fileInputRef = useRef<HTMLInputElement>(null)
   const MAX_IMG_DIM = 1920
 
-  const { control, errors, isSubmitting, watch, setValue, submit } = useAdminForm({
+  const { control, errors, isSubmitting, watch, setValue, submit, validationSummary } = useAdminForm({
     schema: BasketFormSchema,
     defaultValues: DEFAULTS,
     initialData,
@@ -259,6 +259,12 @@ export default function BasketForm({ initialData, redirectPath = "/admin/cestas"
       {feedback && (
         <div className={`rounded-xl border p-4 text-sm font-medium ${feedback.type === "success" ? "border-green-200 bg-green-50 text-green-700" : "border-red-200 bg-red-50 text-red-700"}`}>
           {feedback.message}
+        </div>
+      )}
+
+      {validationSummary && (
+        <div className="rounded-xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-700">
+          {validationSummary}
         </div>
       )}
 

@@ -30,7 +30,7 @@ export default function BrandForm({ initialData }: BrandFormProps) {
   const router = useRouter()
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null)
 
-  const { register, control, errors, isSubmitting, submit } = useAdminForm({
+  const { register, control, errors, isSubmitting, submit, validationSummary } = useAdminForm({
     schema: BrandFormSchema,
     defaultValues: DEFAULTS,
     initialData,
@@ -63,6 +63,12 @@ export default function BrandForm({ initialData }: BrandFormProps) {
       {feedback && (
         <div className={`rounded-lg p-3 text-sm font-medium ${feedback.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}>
           {feedback.message}
+        </div>
+      )}
+
+      {validationSummary && (
+        <div className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm font-medium text-red-700">
+          {validationSummary}
         </div>
       )}
 
