@@ -11,7 +11,6 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { createProduct, updateProduct, listFormBrands, listFormCategories, listProductBrandIds } from "@/app/admin/produtos/actions"
-import { uploadProductImage } from "@/app/admin/cestas/actions"
 import { ProductBrandManagement } from "@/components/admin/product-brand-management"
 import { Upload, X } from "lucide-react"
 import Image from "next/image"
@@ -130,8 +129,10 @@ export function ProductForm({ initialData }: Props) {
 
       const formData = new FormData()
       formData.append("file", file)
-      const url = await uploadProductImage(formData)
-      setValue("image_url", url)
+      const res = await fetch("/api/upload", { method: "POST", body: formData })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || "Erro no upload.")
+      setValue("image_url", json.url)
     } catch (err: any) { setUploadError(err.message || "Erro inesperado no upload.") }
     finally {
       setIsUploading(false)

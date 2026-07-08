@@ -39,7 +39,8 @@ function addSecurityHeaders(response: NextResponse, pathname: string) {
     response.headers.set(key, value)
   }
   if (!pathname.startsWith("/_next") && !pathname.includes(".")) {
-    response.headers.set("Cache-Control", "private, no-cache, no-store, must-revalidate")
+    response.headers.set("Cache-Control", "s-maxage=0, max-age=0, no-cache, no-store, must-revalidate, private")
+    response.headers.set("CDN-Cache-Control", "no-cache")
     response.headers.set("Pragma", "no-cache")
     response.headers.set("Expires", "0")
   }

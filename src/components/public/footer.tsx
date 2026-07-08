@@ -60,7 +60,6 @@ export default function Footer({
           <h4 className="mb-5 text-sm font-bold tracking-wider text-white">Navegação</h4>
           <ul className="space-y-3 text-sm text-gray-400">
             <li><Link href="/#cestas" className="hover:text-white transition-colors">Catálogo de Cestas</Link></li>
-            <li><Link href="/#processo" className="hover:text-white transition-colors">Como funciona</Link></li>
             <li><Link href="/#faq" className="hover:text-white transition-colors">Perguntas Frequentes</Link></li>
           </ul>
         </div>

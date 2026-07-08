@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
-import { createBasket, updateBasket, saveBasketItems, listAllBrands, uploadImage } from "@/app/admin/cestas/actions"
+import { createBasket, updateBasket, saveBasketItems, listAllBrands } from "@/app/admin/cestas/actions"
 import { BasketItemManagement } from "./basket-item-management"
 import { useAdminForm } from "@/lib/use-admin-form"
 
@@ -137,8 +137,10 @@ export default function BasketForm({ initialData, redirectPath = "/admin/cestas"
 
       const formData = new FormData()
       formData.append("file", file)
-      const url = await uploadImage(formData)
-      setValue("image_url", url)
+      const res = await fetch("/api/upload", { method: "POST", body: formData })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || "Erro no upload.")
+      setValue("image_url", json.url)
     } catch (err: any) { setUploadError(err.message || "Erro inesperado no upload.") }
     finally {
       setIsUploading(false)
