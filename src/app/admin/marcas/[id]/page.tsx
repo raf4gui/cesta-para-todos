@@ -21,7 +21,7 @@ export default async function EditBrandPage({
   return (
     <section className="p-6 space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Editar Marca</h1>
-      <BrandForm initialData={{ id: brand.id, name: brand.name, description: brand.description, logo: brand.logo, ativo: brand.ativo }} />
+      <BrandForm initialData={{ id: brand.id, name: brand.name, description: brand.description ?? "", logo: brand.logo ?? "", ativo: brand.ativo }} />
     </section>
   );
 }

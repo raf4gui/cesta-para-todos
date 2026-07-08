@@ -50,8 +50,9 @@ export async function listBaskets({ page = 1, limit = 25, search = "", sort = "c
 }
 
 export async function getBasket(id: string) {
-  const { data: basket, error } = await sb().from("baskets").select("*").eq("id", id).single()
-  if (error) throw new Error(error.message)
+  const { data: basket, error } = await sb().from("baskets").select("*").eq("id", id).maybeSingle()
+  if (error) return { basket: null, items: [], allBrands: [] }
+  if (!basket) return { basket: null, items: [], allBrands: [] }
 
   const { data: items } = await sb().from("basket_items").select("*, product:products(id, name, price, sale_price, image_url, brand_id, brand:brands!products_brand_id_fkey(id, name))").eq("basket_id", id)
 

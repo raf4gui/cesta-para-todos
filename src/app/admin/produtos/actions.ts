@@ -51,8 +51,8 @@ export async function listProducts({ page = 1, limit = 25, search = "", brandId,
 }
 
 export async function getProduct(id: string) {
-  const { data, error } = await sb().from("products").select("*, brand:brands!products_brand_id_fkey(id, name), category:categories!products_category_id_fkey(id, name)").eq("id", id).single()
-  if (error) throw new Error(error.message)
+  const { data, error } = await sb().from("products").select("*, brand:brands!products_brand_id_fkey(id, name), category:categories!products_category_id_fkey(id, name)").eq("id", id).maybeSingle()
+  if (error) return null
   return data
 }
 

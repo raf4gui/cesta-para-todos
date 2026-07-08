@@ -329,7 +329,7 @@ for (const item of items) {
                         <p className="text-sm font-bold text-[#102016]">{prod?.name || "Produto removido"}</p>
                         {specs && <p className="text-xs text-[#8c9c91]">{specs}</p>}
 
-                        {isFardo && hasSingleBrand && !showBrandSelector && (
+                        {isFardo && hasSingleBrand && !showBrandSelector && brands[0] && (
                           <p className="text-xs text-[#526157]">{brands[0].name}</p>
                         )}
 

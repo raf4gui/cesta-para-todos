@@ -28,12 +28,15 @@ export default async function PedidoDetalhePage({ params, searchParams }: { para
   }
 
   const { order, items, history, notes } = data
+  if (!order) notFound()
   const customer = order.customer
   const whatsappPhone = customer?.whatsapp || customer?.phone || ""
 
-  const invoices = await listNfeEmissions(id)
+  let invoices: any[] = []
+  try { invoices = await listNfeEmissions(id) } catch { invoices = [] }
 
-  const settings = await getStoreSettings()
+  let settings: any = {}
+  try { settings = await getStoreSettings() } catch { settings = {} }
   const printerType = settings.printer_type || "a4"
   const shareMessage = [
     "*Pedido Finalizado!*",

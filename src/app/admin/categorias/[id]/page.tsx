@@ -12,6 +12,8 @@ export default async function EditarCategoriaPage({ params }: { params: Promise<
     notFound();
   }
 
+  if (!category) notFound();
+
   return (
     <section className="space-y-6 p-6">
       <div>

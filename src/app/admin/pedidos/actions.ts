@@ -38,8 +38,9 @@ export async function listFormBaskets() {
 }
 
 export async function getOrder(id: string) {
-  const { data: order, error: oe } = await sb().from("orders").select("*, customer:customers!orders_customer_id_fkey(*), basket:baskets!orders_basket_id_fkey(*)").eq("id", id).single()
-  if (oe) throw new Error(oe.message)
+  const { data: order, error: oe } = await sb().from("orders").select("*, customer:customers!orders_customer_id_fkey(*), basket:baskets!orders_basket_id_fkey(*)").eq("id", id).maybeSingle()
+  if (oe) return { order: null, items: [], history: [], notes: [] }
+  if (!order) return { order: null, items: [], history: [], notes: [] }
   const { data: items } = await sb().from("order_items").select("*, product:products(name, price, sale_price, purchase_price, brand:brands!products_brand_id_fkey(name)), chosen_brand:brands!order_items_chosen_brand_id_fkey(name)").eq("order_id", id)
   const { data: history } = await sb().from("order_status_history").select("*").eq("order_id", id).order("changed_at", { ascending: true })
   const { data: notes } = await sb().from("order_notes").select("*").eq("order_id", id).order("created_at", { ascending: true })
@@ -84,19 +85,23 @@ export async function updateOrderStatus(id: string, status: string) {
   if (status === "FINALIZADO" && order) {
     const { data: items } = await sb().from("order_items").select("product_id, quantity").eq("order_id", id)
     for (const item of items ?? []) {
-      const { data: product } = await sb().from("products").select("stock").eq("id", item.product_id).single()
-      if (product) {
-        const newStock = Math.max(0, product.stock - item.quantity)
-        await sb().from("products").update({ stock: newStock }).eq("id", item.product_id)
-        await sb().from("stock_movements").insert({
-          product_id: item.product_id,
-          movement_type: "SAIDA",
-          quantity: item.quantity,
-          reason: `Pedido finalizado #${order.protocol}`,
-          previous_stock: product.stock,
-          new_stock: newStock,
-          order_id: id,
-        })
+      try {
+        const { data: product } = await sb().from("products").select("stock").eq("id", item.product_id).maybeSingle()
+        if (product) {
+          const newStock = Math.max(0, product.stock - item.quantity)
+          await sb().from("products").update({ stock: newStock }).eq("id", item.product_id)
+          await sb().from("stock_movements").insert({
+            product_id: item.product_id,
+            movement_type: "SAIDA",
+            quantity: item.quantity,
+            reason: `Pedido finalizado #${order.protocol}`,
+            previous_stock: product.stock,
+            new_stock: newStock,
+            order_id: id,
+          })
+        }
+      } catch {
+        console.error(`Erro ao processar estoque do produto ${item.product_id} no pedido ${id}`)
       }
     }
   }

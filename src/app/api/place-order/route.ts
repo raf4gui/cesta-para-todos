@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
       .from("orders")
       .select("*, basket:baskets!orders_basket_id_fkey(name)")
       .eq("id", order.id)
-      .single()
+      .maybeSingle()
 
     const messageText = [
       `Olá.`,
@@ -181,11 +181,11 @@ export async function POST(request: NextRequest) {
       ``,
       `Meu nome é ${client_name}.`,
       ``,
-      `Meu protocolo é ${fullOrder?.protocol || order.id}.`,
+      `Meu protocolo é ${fullOrder?.protocol || order.id.slice(0, 8).toUpperCase()}.`,
       ``,
       `Aguardo o retorno para confirmação do pedido.`,
     ].join("\n")
-    const { data: settings } = await supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!).from("store_settings").select("whatsapp_phone").eq("id", true).single()
+    const { data: settings } = await supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!).from("store_settings").select("whatsapp_phone").eq("id", true).maybeSingle()
     const storePhone = settings?.whatsapp_phone || ""
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${storePhone}&text=${encodeURIComponent(messageText)}`
 

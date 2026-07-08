@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache"
 
 export async function getWhatsAppPhone() {
   const sb = supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!)
-  const { data } = await sb.from("store_settings").select("whatsapp_phone").eq("id", true).single()
+  const { data } = await sb.from("store_settings").select("whatsapp_phone").eq("id", true).maybeSingle()
   return data?.whatsapp_phone || ""
 }
 
@@ -169,23 +169,23 @@ export async function getPublicBasketDetails(basketId: string) {
     .select("id, name, description, image_url, tipo, brand_id, brand:brands!baskets_brand_id_fkey(name), quantidade_fardo")
     .eq("id", basketId)
     .eq("ativo", true)
-    .single()
+    .maybeSingle()
 
-  if (basketErr) throw basketErr
+  if (basketErr) return { basket: null, items: [], itemBrands: [] }
+
+  if (!basket) return { basket: null, items: [], itemBrands: [] }
 
   const { data: items, error: itemsErr } = await sb
     .from("basket_items")
     .select("*, product:products(id, name, sale_price, brand_id, brand:brands!products_brand_id_fkey(id, name), peso, volume, unidade)")
     .eq("basket_id", basketId)
 
-  if (itemsErr) throw itemsErr
+  if (itemsErr) return { basket, items: [], itemBrands: [] }
 
   const { data: itemBrands, error: itemBrandsErr } = await sb
     .from("basket_item_brands")
     .select("*, brand:brands!basket_item_brands_brand_id_fkey(id, name)")
     .eq("basket_id", basketId)
-
-  if (itemBrandsErr) throw itemBrandsErr
 
   return { basket, items: items ?? [], itemBrands: itemBrands ?? [] }
 }
@@ -348,13 +348,13 @@ export async function submitOrder(payload: {
   const { error: itemsErr } = await sb.from("order_items").insert(orderItemsRows)
   if (itemsErr) throw itemsErr
 
-  const { data: fullOrder, error: fullOrderErr } = await sb
+  const { data: fullOrder } = await sb
     .from("orders")
     .select("*, basket:baskets(name)")
     .eq("id", order.id)
-    .single()
+    .maybeSingle()
 
-  if (fullOrderErr) throw fullOrderErr
+  const protocol = fullOrder?.protocol || order.id.slice(0, 8).toUpperCase()
 
   const messageText = [
     `Olá.`,
@@ -363,11 +363,11 @@ export async function submitOrder(payload: {
     ``,
     `Meu nome é ${payload.client_name}.`,
     ``,
-    `Meu protocolo é ${fullOrder.protocol}.`,
+    `Meu protocolo é ${protocol}.`,
     ``,
     `Aguardo o retorno para confirmação do pedido.`,
   ].join("\n")
-  const { data: settings } = await supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!).from("store_settings").select("whatsapp_phone").eq("id", true).single()
+  const { data: settings } = await supabaseAdmin(process.env.SUPABASE_SERVICE_ROLE_KEY!).from("store_settings").select("whatsapp_phone").eq("id", true).maybeSingle()
   const storePhone = settings?.whatsapp_phone || ""
   const whatsappUrl = `https://api.whatsapp.com/send?phone=${storePhone}&text=${encodeURIComponent(messageText)}`
 
@@ -375,16 +375,16 @@ export async function submitOrder(payload: {
 
   // PASSO 10 - Redirecionando para WhatsApp
   console.log("PASSO 10 - Redirecionando para WhatsApp")
-  console.log("   Protocolo do pedido:", fullOrder.protocol)
+  console.log("   Protocolo do pedido:", protocol)
   console.log("   WhatsApp URL gerada")
   console.log("=== SUBMIT ORDER FIM (SUCESSO) ===")
 
   return {
     id: order.id,
-    protocol: fullOrder.protocol,
+    protocol,
     client_name: payload.client_name,
     client_phone: payload.client_phone,
-    basket_name: fullOrder.basket?.name,
+    basket_name: fullOrder?.basket?.name,
     whatsapp_url: whatsappUrl,
   }
 }
