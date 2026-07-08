@@ -202,7 +202,17 @@ async function uploadFile(formData: FormData, prefix: string): Promise<string> {
     if (error.message?.includes("policy")) {
       throw new Error("Upload negado pela política de segurança do Storage. Verifique as permissões do bucket 'images' no Supabase.")
     }
-    throw new Error("Falha no upload: " + error.message)
+    if (error.message?.toLowerCase().includes("bucket") && error.message?.toLowerCase().includes("not found")) {
+      const { error: createErr } = await sb().storage.createBucket("images", { public: true })
+      if (createErr) throw new Error("Falha ao criar bucket: " + createErr.message)
+      const { error: retryErr } = await sb().storage.from("images").upload(fileName, file, {
+        contentType: file.type,
+        upsert: true,
+      })
+      if (retryErr) throw new Error("Falha no upload: " + retryErr.message)
+    } else {
+      throw new Error("Falha no upload: " + error.message)
+    }
   }
   const { data } = sb().storage.from("images").getPublicUrl(fileName)
   return data.publicUrl

@@ -327,10 +327,11 @@ for (const item of items) {
                     <div key={item.product_id} className="flex items-center justify-between p-4">
                       <div className="flex-1 min-w-0 pr-4">
                         <p className="text-sm font-bold text-[#102016]">{prod?.name || "Produto removido"}</p>
-                        {hasSingleBrand && !showBrandSelector && (
+                        {specs && <p className="text-xs text-[#8c9c91]">{specs}</p>}
+
+                        {isFardo && hasSingleBrand && !showBrandSelector && (
                           <p className="text-xs text-[#526157]">{brands[0].name}</p>
                         )}
-                        {specs && <p className="text-xs text-[#8c9c91]">{specs}</p>}
 
                         {isFardo && (
                           <div className="mt-2 space-y-2">
